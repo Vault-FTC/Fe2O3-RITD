@@ -1,29 +1,25 @@
 package org.firstinspires.ftc.teamcode.AppeaseCode;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.IMU;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.R;
-import org.firstinspires.ftc.teamcode.geometry.Rotation2D;
-import org.firstinspires.ftc.teamcode.geometry.TimeStamp;
-import org.firstinspires.ftc.teamcode.geometry.Vector2D;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-import java.util.function.Supplier;
-
+@TeleOp
 public class TestOpMode extends OpMode {
     DcMotor[] driveMotors;
     DriveBase driveBase;
     BetterIMU betterIMU;
+    MotorSpeeds launchSpeed = MotorSpeeds.HALF;
 
     ArmBase armBase;
-    boolean last_a;
+    boolean last_start;
     boolean last_b;
     boolean last_x;
     boolean last_y;
+    boolean last_up;
+    boolean last_down;
     @Override
     public void init(){
         DcMotor lf = hardwareMap.get(DcMotor.class, "lf");
@@ -46,9 +42,10 @@ public class TestOpMode extends OpMode {
     public void loop(){
         driveBase.drive();
 
-        if (!last_a && gamepad1.a){
+        if (!last_start && gamepad1.start){
             driveBase.toggleFieldCentric();
         }
+
         if (!last_b && gamepad1.b){
             betterIMU.setDeg(0);
         }
@@ -58,15 +55,39 @@ public class TestOpMode extends OpMode {
         if (!last_y && gamepad1.y){
             armBase.toggleKicker();
         }
-        last_a = gamepad1.a;
+        if (gamepad1.a)
+        {
+            armBase.toggleFeed(0.5);
+        }
+        else
+        {
+            armBase.toggleFeed(0);
+        }
+        if (gamepad1.dpad_up && !last_up) {
+            if((launchSpeed.ordinal() + 1) < MotorSpeeds.values().length) {
+                launchSpeed = MotorSpeeds.values()[launchSpeed.ordinal() + 1];
+                armBase.setSpeed(launchSpeed);
+            }
+        }
+        if (gamepad1.dpad_down && !last_down){
+            if((launchSpeed.ordinal() - 1) >= 0) {
+                launchSpeed = MotorSpeeds.values()[launchSpeed.ordinal() - 1];
+                armBase.setSpeed(launchSpeed);
+            }
+        }
+
+        last_start = gamepad1.start;
         last_b = gamepad1.b;
         last_x = gamepad1.x;
         last_y = gamepad1.y;
+        last_up = gamepad1.dpad_up;
+        last_down = gamepad1.dpad_down;
         betterIMU.update();
         armBase.execute();
         telemetry.addData("Centric", driveBase.fieldCentric);
         telemetry.addData("Kick bool", armBase.spinWheel);
         telemetry.addData("Gate bool", armBase.gateClosed);
+        telemetry.addData( "Kick Speed", armBase.getKickerVelocity());
         telemetry.addData("ResultAngle", betterIMU.getRot().getDeg());
         telemetry.addData("RealAngle", betterIMU.realRot.getDeg());
         telemetry.addData("OffsetAngle", betterIMU.offsetRot.getDeg());
