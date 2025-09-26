@@ -15,6 +15,7 @@ public class ArmBase {
     boolean spinWheel = false;
     boolean gateClosed = true;
     double kickSpeed;
+    MotorSpeeds currentSpeed;
     private Servo servo;
     private DcMotorEx kicker;
     private DcMotor feed;
@@ -23,13 +24,21 @@ public class ArmBase {
         servo = hardwareMap.get(Servo.class, "gate");
         kicker = hardwareMap.get(DcMotorEx.class, "shooter");
         feed = hardwareMap.get(DcMotor.class, "feed");
+        kicker.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         kicker.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        kicker.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(100, 0, 0,0));
+        kicker.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(300, 0, 0,0));
         kicker.setPower(1.0);
+        kicker.setVelocity(0, AngleUnit.DEGREES);
     }
 
     public void setSpeed(MotorSpeeds speed){
         kickSpeed = speed.speed;
+        currentSpeed = speed;
+    }
+
+    public void setKicker(boolean on)
+    {
+       spinWheel = on;
     }
 
     public void toggleKicker(){
@@ -44,9 +53,6 @@ public class ArmBase {
     {
         feed.setPower(input);
     }
-    public void setKickSpeed(){
-
-    }
     public void execute(){
         if (Math.abs(getGateError()) > .1){
             servo.setPosition(gateClosed ? 1. : 0.);
@@ -60,9 +66,9 @@ public class ArmBase {
         }
     }
 
-    public double getKickerVelocity()
+    public MotorSpeeds getKickerVelocity()
     {
-        return kicker.getVelocity(AngleUnit.DEGREES);
+        return currentSpeed;
     }
 
     private double getGateError(){

@@ -1,13 +1,18 @@
 package org.firstinspires.ftc.teamcode.AppeaseCode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Autonomous.Location;
 import org.firstinspires.ftc.teamcode.geometry.Rotation2D;
 import org.firstinspires.ftc.teamcode.geometry.Vector2D;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
 public class DriveBase {
@@ -15,27 +20,71 @@ public class DriveBase {
     Supplier<Vector2D> transSupp;
     DoubleSupplier rotSupp;
     BetterIMU imu;
-
     boolean fieldCentric = false;
-    public DriveBase(BetterIMU imu, DcMotor[] motors, Gamepad drivePad){
-        driveMotors = motors;
+    IntSupplier odoRight, odoLeft, odoBack;
+
+    public DriveBase(BetterIMU imu, HardwareMap hardwareMap, Gamepad drivePad)
+    {
+        DcMotorEx lf = hardwareMap.get(DcMotorEx.class, "lf"); // 0
+        DcMotorEx rf = hardwareMap.get(DcMotorEx.class, "rf"); // 1
+        DcMotorEx lb = hardwareMap.get(DcMotorEx.class, "lb"); // 2
+        DcMotorEx rb = hardwareMap.get(DcMotorEx.class, "rb"); // 3
+
+        lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        odoRight = () -> rb.getCurrentPosition();
+        odoLeft = () -> lb.getCurrentPosition();
+        odoBack = () -> rf.getCurrentPosition();
+
+        driveMotors = new DcMotor[]{lf, rf, lb, rb};
+
         transSupp = () -> new Vector2D(drivePad.left_stick_x, -drivePad.left_stick_y);
         rotSupp = () -> drivePad.right_stick_x;
         this.imu = imu;
     }
-
     public void toggleFieldCentric(){
         fieldCentric = !fieldCentric;
-    };
+    }
 
-    public void drive(){
+    public void driveToPosition(Location target, double turnVal)
+    {
+        double p = 0.0002;
+        double strafe = (target.Strafe - odoBack.getAsInt());
+        double forward1 = (target.Forward - odoLeft.getAsInt());
+        double forward2 = (target.Forward - odoRight.getAsInt());
+        double forward = (forward1 + forward2) / 2;
+        if(Math.abs(forward) <  400)
+        {
+            forward = 0;
+        }
+        if(Math.abs(strafe) < 400)
+        {
+            strafe = 0;
+        }
+        drive(forward * p, strafe * p, turnVal);
+    }
+
+    public void drive()
+    {
         Vector2D translation = transSupp.get();
         if (fieldCentric){
             translation.rotateBy(imu.getRot());
         }
+
         double forward = translation.getY();
         double strafe = translation.getX(); // Right +
         double rotate = rotSupp.getAsDouble(); // Clockwise +
+        drive(forward, strafe, rotate);
+    }
+
+    public void drive(double forward, double strafe, double rotate){
 
         double lfPow, rfPow, lbPow, rbPow;
         lfPow = -forward - strafe - rotate;
@@ -44,20 +93,28 @@ public class DriveBase {
         rbPow = forward + strafe - rotate;
 
         double maxInput = 0;
+
         for (double motorPow : new double[] {lfPow, rfPow, lbPow, rbPow}){
             maxInput = Math.max(maxInput, Math.abs(motorPow));
         }
+
         if (maxInput > Constants.DriveConst.maxPower){
             lfPow *= Constants.DriveConst.maxPower / maxInput;
             rfPow *= Constants.DriveConst.maxPower / maxInput;
             lbPow *= Constants.DriveConst.maxPower / maxInput;
             rbPow *= Constants.DriveConst.maxPower / maxInput;
         }
+
         driveMotors[0].setPower(lfPow);
         driveMotors[1].setPower(rfPow);
         driveMotors[2].setPower(lbPow);
         driveMotors[3].setPower(rbPow);
     }
 
-
+    public void updateValues(Telemetry telemetry)
+    {
+        telemetry.addData("Robot backOdo", odoBack.getAsInt());
+        telemetry.addData("Robot rightOdo", odoRight.getAsInt());
+        telemetry.addData("Robot leftOdo", odoLeft.getAsInt());
+    }
 }

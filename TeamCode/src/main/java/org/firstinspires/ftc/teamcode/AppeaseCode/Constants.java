@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.AppeaseCode;
 
 public class Constants {
     public static class DriveConst{
-        public static double maxPower = .5; // 0 - 1 as %
+        public static double maxPower = 1; // 0 - 1 as %
     }
 
     public static class MotorNames{
