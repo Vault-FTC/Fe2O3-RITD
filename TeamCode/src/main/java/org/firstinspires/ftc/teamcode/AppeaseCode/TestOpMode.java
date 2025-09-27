@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.AppeaseCode;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCaptureSequence;
 import org.firstinspires.ftc.teamcode.Autonomous.Location;
+import org.firstinspires.ftc.teamcode.LimeLight;
 
 import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
@@ -22,7 +24,7 @@ public class TestOpMode extends OpMode {
     BetterIMU betterIMU;
     MotorSpeeds launchSpeed = MotorSpeeds.HALF;
     ArmBase armBase;
-    Limelight3A limelight;
+    LimeLight limelight;
     boolean last_start;
     boolean last_b;
     boolean last_x;
@@ -31,10 +33,7 @@ public class TestOpMode extends OpMode {
     boolean last_down;
     @Override
     public void init(){
-        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-
-        limelight.pipelineSwitch(0);
-        limelight.start();
+        limelight = new LimeLight(hardwareMap);
 
         // Right Odo - 3
         // Left Odo - 2
@@ -62,23 +61,39 @@ public class TestOpMode extends OpMode {
 
     @Override
     public void loop(){
-        if(gamepad1.b) {
-            driveBase.driveToPosition(new Location(0, 0), 0);
-            driveBase.updateValues(telemetry);
+        LLResultTypes.FiducialResult result = limelight.getResult();
+        double turnVal = 0;
+        double distance=-1;
+        if(result != null)
+        {
+            turnVal = result.getTargetXDegrees() * 0.05;
+           distance = result.getRobotPoseTargetSpace().getPosition().y;
+
         }
-        else {
-            driveBase.drive();
-            driveBase.updateValues(telemetry);
+
+        if(!gamepad1.right_bumper)
+        {
+            turnVal=0;
         }
+
+//        if(gamepad1.b) {
+//            driveBase.driveToPosition(new Location(0, 0), 0);
+//            driveBase.updateValues(telemetry);
+//        }
+//        else {
+            driveBase.drive(turnVal);
+            driveBase.updateValues(telemetry);
+//        }
 
         if (!last_start && gamepad1.start){
             driveBase.toggleFieldCentric();
+            driveBase.resetHeading();
         }
 
         if (!last_b && gamepad1.b){
             betterIMU.setDeg(0);
         }
-        if (!last_x && gamepad1.x){
+       if (!last_x && gamepad1.x){
             armBase.toggleGate();
         }
         if (!last_y && gamepad1.y){
@@ -121,16 +136,9 @@ public class TestOpMode extends OpMode {
         last_down = gamepad1.dpad_down;
         betterIMU.update();
         armBase.execute();
+        driveBase.update();
 
-        LLResult result = limelight.getLatestResult();
-        if (result != null) {
-            if (result.isValid()) {
-                Pose3D botpose = result.getBotpose();
-                telemetry.addData("tx", result.getTx());
-                telemetry.addData("ty", result.getTy());
-                telemetry.addData("Botpose", botpose.toString());
-            }
-        }
+        telemetry.addData("heading",driveBase.getHeading());
         telemetry.addData("Centric", driveBase.fieldCentric);
         //telemetry.addData("Kick bool", armBase.spinWheel);
         //telemetry.addData("Gate bool", armBase.gateClosed);

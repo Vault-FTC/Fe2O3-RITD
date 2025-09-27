@@ -34,7 +34,7 @@ public class LimeLight {
     {
         LLResultTypes.FiducialResult res = getResult();
         if(res != null) {
-            if(Math.abs(res.getTargetXDegrees()) > 0.5)
+            if(Math.abs(res.getTargetXDegrees()) > 0.25)
             {
                 return res.getTargetXDegrees() * 0.05;
             }

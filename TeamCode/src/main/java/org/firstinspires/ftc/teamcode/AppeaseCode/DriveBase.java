@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Autonomous.Location;
+import org.firstinspires.ftc.teamcode.geometry.PoseEstimator;
 import org.firstinspires.ftc.teamcode.geometry.Rotation2D;
 import org.firstinspires.ftc.teamcode.geometry.Vector2D;
 
@@ -22,6 +23,7 @@ public class DriveBase {
     BetterIMU imu;
     boolean fieldCentric = false;
     IntSupplier odoRight, odoLeft, odoBack;
+    PoseEstimator pose;
 
     public DriveBase(BetterIMU imu, HardwareMap hardwareMap, Gamepad drivePad)
     {
@@ -44,6 +46,8 @@ public class DriveBase {
         odoBack = () -> rf.getCurrentPosition();
 
         driveMotors = new DcMotor[]{lf, rf, lb, rb};
+
+        pose = new PoseEstimator(odoLeft, odoRight, odoBack);
 
         transSupp = () -> new Vector2D(drivePad.left_stick_x, -drivePad.left_stick_y);
         rotSupp = () -> drivePad.right_stick_x;
@@ -71,7 +75,7 @@ public class DriveBase {
         drive(forward * p, strafe * p, turnVal);
     }
 
-    public void drive()
+    public void drive(double gge)
     {
         Vector2D translation = transSupp.get();
         if (fieldCentric){
@@ -80,7 +84,7 @@ public class DriveBase {
 
         double forward = translation.getY();
         double strafe = translation.getX(); // Right +
-        double rotate = rotSupp.getAsDouble(); // Clockwise +
+        double rotate = rotSupp.getAsDouble() + gge; // Clockwise +
         drive(forward, strafe, rotate);
     }
 
@@ -111,6 +115,23 @@ public class DriveBase {
         driveMotors[3].setPower(rbPow);
     }
 
+    public void update()
+    {
+        pose.update();
+    }
+
+    public void resetHeading(double targetAngle)
+    {
+        pose.resetHeading(targetAngle);
+    }
+
+    public void resetHeading()
+    {
+        resetHeading(0);
+    }
+
+    public double getHeading()
+    {return pose.getHeading();}
     public void updateValues(Telemetry telemetry)
     {
         telemetry.addData("Robot backOdo", odoBack.getAsInt());

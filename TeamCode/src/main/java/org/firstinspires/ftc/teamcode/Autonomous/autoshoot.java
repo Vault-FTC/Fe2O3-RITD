@@ -36,6 +36,8 @@ public class autoshoot extends LinearOpMode {
         armBase = new ArmBase(hardwareMap);
         limelight = new LimeLight(hardwareMap);
 
+        driveBase.resetHeading(45);
+
         setTargets();
 
         waitForStart();
@@ -45,7 +47,12 @@ public class autoshoot extends LinearOpMode {
 
             double time = getRuntime();
 
-            double turnVal = limelight.getTx();
+            double turnVal = 0;
+
+            LLResultTypes.FiducialResult result = limelight.getResult();
+            if(result != null) {
+                turnVal = result.getTargetXDegrees() * 0.05;
+            }
 
             if(time < 8)
             {
@@ -71,9 +78,11 @@ public class autoshoot extends LinearOpMode {
             {
                 driveBase.driveToPosition(secondPosition, 0);
             }
-            else if(time < 22)
+            else if(time < 22) {
                 driveBase.drive(0, 0, 0);
+            }
 
+            driveBase.update();
             armBase.execute();
 //            armBase.setSpeed(launchSpeed); //Three quarters speed at 900, starts in initialize
 //            armBase.execute();
