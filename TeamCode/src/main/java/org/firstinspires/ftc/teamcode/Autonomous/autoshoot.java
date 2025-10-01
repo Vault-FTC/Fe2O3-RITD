@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.AppeaseCode.DriveBase;
 import org.firstinspires.ftc.teamcode.AppeaseCode.MotorSpeeds;
 import org.firstinspires.ftc.teamcode.LimeLight;
 
-@Autonomous(name = "AutoShoot Near", group = "Linear Op Mode")
+@Autonomous(name = "AutoShoot Near", group = "Blue Team")
 public class autoshoot extends LinearOpMode {
     DriveBase driveBase;
     ArmBase armBase;
@@ -34,7 +34,7 @@ public class autoshoot extends LinearOpMode {
         BetterIMU betterIMU = new BetterIMU(hardwareMap);
         driveBase = new DriveBase(betterIMU, hardwareMap, gamepad1);
         armBase = new ArmBase(hardwareMap);
-        limelight = new LimeLight(hardwareMap);
+        limelight = new LimeLight(hardwareMap, 20);
 
         driveBase.resetHeading(45);
 
@@ -49,7 +49,7 @@ public class autoshoot extends LinearOpMode {
 
             double turnVal = 0;
 
-            LLResultTypes.FiducialResult result = limelight.getResult();
+            LLResultTypes.FiducialResult result = limelight.getEitherResult();
             if(result != null) {
                 turnVal = result.getTargetXDegrees() * 0.05;
             }

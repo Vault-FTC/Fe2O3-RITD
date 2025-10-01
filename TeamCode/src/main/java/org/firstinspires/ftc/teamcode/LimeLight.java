@@ -7,9 +7,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class LimeLight {
     Limelight3A limelight;
+    int apriltag;
 
-    public LimeLight(HardwareMap hardwareMap)
+    public LimeLight(HardwareMap hardwareMap, int apriltag)
     {
+        this.apriltag = apriltag;
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(0);
         limelight.start();
@@ -21,7 +23,7 @@ public class LimeLight {
         if (result != null) {
             if (result.isValid()) {
                 for(LLResultTypes.FiducialResult res : result.getFiducialResults()) {
-                    if(res.getFiducialId() == 19 || res.getFiducialId() == 20)
+                    if(res.getFiducialId() == apriltag)
                     {
                         return res;
                     }
@@ -29,6 +31,18 @@ public class LimeLight {
             }
         }
         return null;
+    }
+
+    public LLResultTypes.FiducialResult getEitherResult()
+    {
+        LLResultTypes.FiducialResult res;
+        apriltag = 20;
+        res = getResult();
+        if (res == null) {
+            apriltag = 24;
+            res = getResult();
+        }
+        return res;
     }
     public double getTx()
     {

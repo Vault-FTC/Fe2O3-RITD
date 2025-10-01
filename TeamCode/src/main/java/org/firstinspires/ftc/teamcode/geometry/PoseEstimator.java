@@ -1,12 +1,16 @@
 package org.firstinspires.ftc.teamcode.geometry;
 
+import androidx.annotation.NonNull;
+
 import java.util.function.IntSupplier;
 
 public class PoseEstimator {
     // Constants
-    double trackWidth = 16.2;
+    double trackWidth = 15.15 * 2.54;// * 1165 / (Math.PI * 2);
     double strafeOffset = 7.25;
     double ticksPerInch = 0.0013482;
+
+    public double centimetersPerTick =  (3.2 * Math.PI) / 2000;
 
     final private IntSupplier leftOdo, rightOdo, backOdo;
     double deltaLeft, deltaRight, deltaBack;
@@ -31,9 +35,8 @@ public class PoseEstimator {
     }
 
     public double getHeading() {
-        double deltaTheta = (deltaRight - deltaLeft) / trackWidth;
-        heading += deltaTheta;
-
+//        double deltaTheta = (deltaRight - deltaLeft) / trackWidth;
+//        heading += deltaTheta;
         return heading;
     }
     public double getGlobalX() {
@@ -56,9 +59,9 @@ public class PoseEstimator {
         prevRight = currentRight;
         prevBack = currentBack;
 
-        double deltaLeftInches = deltaLeft / ticksPerInch;
-        double deltaRightInches = deltaRight / ticksPerInch;
-        double deltaBackInches = deltaBack / ticksPerInch;
+        double deltaLeftInches = deltaLeft * centimetersPerTick;
+        double deltaRightInches = deltaRight * centimetersPerTick;
+        double deltaBackInches = deltaBack * centimetersPerTick;
 
         double deltaTheta = (deltaRightInches - deltaLeftInches) / trackWidth;
 
@@ -70,5 +73,12 @@ public class PoseEstimator {
         double globalDeltaY = localDeltaX * Math.sin(heading) + localDeltaY * Math.cos(heading);
         x += globalDeltaX;
         y += globalDeltaY;
+    }
+
+    @NonNull
+    @Override
+    public String toString()
+    {
+        return getGlobalX() + "X, " + getGlobalY() + "Y, " + getHeading() + "Theta";
     }
 }

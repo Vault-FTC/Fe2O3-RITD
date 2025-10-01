@@ -41,7 +41,7 @@ public class DriveBase {
         lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        odoRight = () -> rb.getCurrentPosition();
+        odoRight = () ->  rb.getCurrentPosition();
         odoLeft = () -> lb.getCurrentPosition();
         odoBack = () -> rf.getCurrentPosition();
 
@@ -79,7 +79,7 @@ public class DriveBase {
     {
         Vector2D translation = transSupp.get();
         if (fieldCentric){
-            translation.rotateBy(imu.getRot());
+            translation.rotateBy(new Rotation2D().setRad(-pose.getHeading()));
         }
 
         double forward = translation.getY();
@@ -134,8 +134,8 @@ public class DriveBase {
     {return pose.getHeading();}
     public void updateValues(Telemetry telemetry)
     {
-        telemetry.addData("Robot backOdo", odoBack.getAsInt());
-        telemetry.addData("Robot rightOdo", odoRight.getAsInt());
-        telemetry.addData("Robot leftOdo", odoLeft.getAsInt());
+        //telemetry.addData("Robot backOdo", odoBack.getAsInt() * pose.centimetersPerTick);
+        //telemetry.addData("Robot rightOdo", odoRight.getAsInt() * pose.centimetersPerTick);
+        //telemetry.addData("Robot leftOdo", odoLeft.getAsInt() * pose.centimetersPerTick);
     }
 }

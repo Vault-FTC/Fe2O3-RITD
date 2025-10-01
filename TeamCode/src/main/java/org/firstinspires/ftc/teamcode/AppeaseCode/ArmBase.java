@@ -15,15 +15,18 @@ public class ArmBase {
     boolean spinWheel = false;
     boolean gateClosed = true;
     double kickSpeed;
+    double intakeSpeed;
     MotorSpeeds currentSpeed;
     private Servo servo;
     private DcMotorEx kicker;
     private DcMotor feed;
+    private DcMotor intake;
 
     public ArmBase(HardwareMap hardwareMap){
         servo = hardwareMap.get(Servo.class, "gate");
         kicker = hardwareMap.get(DcMotorEx.class, "shooter");
         feed = hardwareMap.get(DcMotor.class, "feed");
+        intake = hardwareMap.get(DcMotor.class, "intake");
         kicker.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         kicker.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         kicker.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(300, 0, 0,0));
@@ -47,6 +50,11 @@ public class ArmBase {
 
     public void toggleGate(){
         gateClosed = ! gateClosed;
+    }
+
+    public void toggleIntake(double speed) {
+        intakeSpeed = speed;
+        spinIntake.thi
     }
 
     public void toggleFeed(double input)

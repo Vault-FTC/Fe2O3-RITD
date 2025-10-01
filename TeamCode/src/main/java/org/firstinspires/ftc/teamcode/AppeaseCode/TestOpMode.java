@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.LimeLight;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
 
-@TeleOp
+@TeleOp(name = "Teleop Blue")
 public class TestOpMode extends OpMode {
     DcMotor[] driveMotors;
     DriveBase driveBase;
@@ -31,10 +31,15 @@ public class TestOpMode extends OpMode {
     boolean last_y;
     boolean last_up;
     boolean last_down;
+
+    void setTargets()
+    {
+        limelight = new LimeLight(hardwareMap, 20);
+    }
+
     @Override
     public void init(){
-        limelight = new LimeLight(hardwareMap);
-
+        setTargets();
         // Right Odo - 3
         // Left Odo - 2
         // Back Odo - 1
@@ -61,14 +66,15 @@ public class TestOpMode extends OpMode {
 
     @Override
     public void loop(){
+        //driveBase.updateValues(telemetry);
+
         LLResultTypes.FiducialResult result = limelight.getResult();
         double turnVal = 0;
         double distance=-1;
         if(result != null)
         {
-            turnVal = result.getTargetXDegrees() * 0.05;
-           distance = result.getRobotPoseTargetSpace().getPosition().y;
-
+            turnVal = result.getTargetXDegrees() * 0.025;
+            distance = result.getRobotPoseTargetSpace().getPosition().y;
         }
 
         if(!gamepad1.right_bumper)
@@ -82,7 +88,6 @@ public class TestOpMode extends OpMode {
 //        }
 //        else {
             driveBase.drive(turnVal);
-            driveBase.updateValues(telemetry);
 //        }
 
         if (!last_start && gamepad1.start){
@@ -90,9 +95,9 @@ public class TestOpMode extends OpMode {
             driveBase.resetHeading();
         }
 
-        if (!last_b && gamepad1.b){
-            betterIMU.setDeg(0);
-        }
+//        if (!last_b && gamepad1.b){
+//            betterIMU.setDeg(0);
+//        }
        if (!last_x && gamepad1.x){
             armBase.toggleGate();
         }
@@ -103,20 +108,8 @@ public class TestOpMode extends OpMode {
         {
             armBase.toggleFeed(0.5);
         }
-        else
-        {
-            armBase.toggleFeed(0);
-        }
-        if(gamepad1.dpad_left)
-        {
-            armBase.setSpeed(MotorSpeeds.EIGHTY);
-        }
-        if(gamepad1.dpad_right)
-        {
-            armBase.setSpeed(MotorSpeeds.FIVE_EIGHTS);
-        }
-        if (gamepad1.dpad_up && !last_up) {
-            if((launchSpeed.ordinal() + 1) < MotorSpeeds.values().length) {
+        if(gamepad1.dpad_up && ! last_up) {
+            if ((launchSpeed.ordinal() + 1) < MotorSpeeds.values().length) {
                 launchSpeed = MotorSpeeds.values()[launchSpeed.ordinal() + 1];
                 armBase.setSpeed(launchSpeed);
             }
@@ -138,7 +131,8 @@ public class TestOpMode extends OpMode {
         armBase.execute();
         driveBase.update();
 
-        telemetry.addData("heading",driveBase.getHeading());
+        telemetry.addData("heading", Math.toDegrees(driveBase.getHeading()));
+        telemetry.addData("pose", driveBase.pose);
         telemetry.addData("Centric", driveBase.fieldCentric);
         //telemetry.addData("Kick bool", armBase.spinWheel);
         //telemetry.addData("Gate bool", armBase.gateClosed);
