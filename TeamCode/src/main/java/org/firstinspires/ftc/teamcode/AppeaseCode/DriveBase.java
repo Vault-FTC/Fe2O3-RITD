@@ -27,10 +27,10 @@ public class DriveBase {
 
     public DriveBase(BetterIMU imu, HardwareMap hardwareMap, Gamepad drivePad)
     {
-        DcMotorEx lf = hardwareMap.get(DcMotorEx.class, "lf"); // 0
-        DcMotorEx rf = hardwareMap.get(DcMotorEx.class, "rf"); // 1
-        DcMotorEx lb = hardwareMap.get(DcMotorEx.class, "lb"); // 2
-        DcMotorEx rb = hardwareMap.get(DcMotorEx.class, "rb"); // 3
+        DcMotorEx rf = hardwareMap.get(DcMotorEx.class, "rf"); // 0
+        DcMotorEx lf = hardwareMap.get(DcMotorEx.class, "lf"); // 1
+        DcMotorEx rb = hardwareMap.get(DcMotorEx.class, "rb"); // 2
+        DcMotorEx lb = hardwareMap.get(DcMotorEx.class, "lb"); // 3
 
         lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -109,10 +109,10 @@ public class DriveBase {
             rbPow *= Constants.DriveConst.maxPower / maxInput;
         }
 
-        driveMotors[0].setPower(lfPow);
-        driveMotors[1].setPower(rfPow);
-        driveMotors[2].setPower(lbPow);
-        driveMotors[3].setPower(rbPow);
+        driveMotors[0].setPower(rfPow);
+        driveMotors[1].setPower(lfPow);
+        driveMotors[2].setPower(rbPow);
+        driveMotors[3].setPower(lbPow);
     }
 
     public void update()

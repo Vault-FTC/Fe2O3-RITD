@@ -7,4 +7,8 @@ public class Intake extends LinearOpMode {
     private DcMotor front_Left = null;
 
 
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+    }
 }

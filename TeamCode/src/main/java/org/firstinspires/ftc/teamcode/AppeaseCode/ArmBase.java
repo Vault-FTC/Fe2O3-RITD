@@ -54,7 +54,6 @@ public class ArmBase {
 
     public void toggleIntake(double speed) {
         intakeSpeed = speed;
-        spinIntake.thi
     }
 
     public void toggleFeed(double input)
