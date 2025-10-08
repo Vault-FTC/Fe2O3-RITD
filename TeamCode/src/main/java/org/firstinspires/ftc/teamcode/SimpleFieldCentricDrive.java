@@ -63,10 +63,10 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
             double rotatedY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
 
             // Calculate motor powers
-            double frontLeftPower = rotatedY - rotatedX - rx;
-            double backLeftPower = rotatedY + rotatedX + rx;
-            double frontRightPower = rotatedY - rotatedX - rx;
-            double backRightPower = rotatedY - rotatedX - rx;
+            double frontLeftPower = rotatedY + rotatedX - rx;
+            double backLeftPower = rotatedY - rotatedX - rx;
+            double frontRightPower = rotatedY - rotatedX + rx;
+            double backRightPower = rotatedY + rotatedX + rx;
 
             // Normalize motor powers to prevent exceeding 1.0
             double maxPower = Math.max(Math.abs(frontLeftPower),
