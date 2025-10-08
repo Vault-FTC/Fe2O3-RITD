@@ -51,7 +51,7 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            double y = -gamepad1.left_stick_y; // Forward/backward
+            double y = gamepad1.left_stick_y; // Forward/backward
             double x = gamepad1.left_stick_x;  // Strafe left/right
             double rx = gamepad1.right_stick_x; // Rotation
 
