@@ -25,6 +25,7 @@ public class TestOpMode extends OpMode {
     MotorSpeeds launchSpeed = MotorSpeeds.HALF;
     ArmBase armBase;
     LimeLight limelight;
+    Intake intake;
     boolean last_start;
     boolean last_b;
     boolean last_x;
@@ -62,6 +63,7 @@ public class TestOpMode extends OpMode {
         driveBase = new DriveBase(betterIMU, hardwareMap, gamepad1);
 
         armBase = new ArmBase(hardwareMap);
+        intake = new Intake(hardwareMap);
     }
 
     @Override
@@ -71,6 +73,7 @@ public class TestOpMode extends OpMode {
         LLResultTypes.FiducialResult result = limelight.getResult();
         double turnVal = 0;
         double distance=-1;
+
         if(result != null)
         {
             turnVal = result.getTargetXDegrees() * 0.025;
@@ -81,13 +84,32 @@ public class TestOpMode extends OpMode {
         {
             turnVal=0;
         }
-
+        if (gamepad1.left_bumper) {
+            intake.spinIntake(1);
+            intake.spinTransfer(1);
+        }
+        else {
+            intake.spinIntake(0);
+            intake.spinTransfer(0);
+        }
+        if (gamepad1.x) {
+            intake.spinKicker(1);
+        }
+        else {
+            intake.spinKicker(0);
+        }
+        if (gamepad1.a) {
+            intake.spinKicker(-1);
+        }
+        else {
+            intake.spinKicker(1);
+        }
 //        if(gamepad1.b) {
 //            driveBase.driveToPosition(new Location(0, 0), 0);
 //            driveBase.updateValues(telemetry);
 //        }
 //        else {
-            driveBase.drive(turnVal);
+        driveBase.drive(turnVal);
 //        }
 
         if (!last_start && gamepad1.start){
@@ -98,16 +120,17 @@ public class TestOpMode extends OpMode {
 //        if (!last_b && gamepad1.b){
 //            betterIMU.setDeg(0);
 //        }
-       if (!last_x && gamepad1.x){
-            armBase.toggleGate();
-        }
+//       if (!last_x && gamepad1.x){
+//            armBase.toggleGate();
+//        }
         if (!last_y && gamepad1.y){
-            armBase.toggleKicker();
+            armBase.toggleShooter();
+            armBase.setSpeed(launchSpeed);
         }
-        if (gamepad1.a)
-        {
-            armBase.toggleFeed(0.5);
-        }
+//        if (gamepad1.a)
+//        {
+//            intake.spinKicker(1);
+//        }
         if(gamepad1.dpad_up && ! last_up) {
             if ((launchSpeed.ordinal() + 1) < MotorSpeeds.values().length) {
                 launchSpeed = MotorSpeeds.values()[launchSpeed.ordinal() + 1];
@@ -137,6 +160,7 @@ public class TestOpMode extends OpMode {
         //telemetry.addData("Kick bool", armBase.spinWheel);
         //telemetry.addData("Gate bool", armBase.gateClosed);
         telemetry.addData( "Kick Speed", armBase.getKickerVelocity());
+        driveBase.updateValues(telemetry);
 //        telemetry.addData("ResultAngle", betterIMU.getRot().getDeg());
 //        telemetry.addData("RealAngle", betterIMU.realRot.getDeg());
 //        telemetry.addData("OffsetAngle", betterIMU.offsetRot.getDeg());
