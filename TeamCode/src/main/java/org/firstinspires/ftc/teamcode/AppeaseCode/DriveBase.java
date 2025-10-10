@@ -23,7 +23,7 @@ public class DriveBase {
     BetterIMU imu;
     boolean fieldCentric = false;
     IntSupplier odoRight, odoLeft, odoBack;
-    PoseEstimator pose;
+    public PoseEstimator pose;
 
     public DriveBase(BetterIMU imu, HardwareMap hardwareMap, Gamepad drivePad)
     {
@@ -41,9 +41,9 @@ public class DriveBase {
         lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        odoRight = () ->  rb.getCurrentPosition();
-        odoLeft = () -> lb.getCurrentPosition();
-        odoBack = () -> rf.getCurrentPosition();
+        odoRight = () ->  rb.getCurrentPosition(); // 2
+        odoLeft = () -> lb.getCurrentPosition(); // 3
+        odoBack = () -> rf.getCurrentPosition(); // 0
 
         driveMotors = new DcMotor[]{lf, rf, lb, rb};
 
@@ -91,10 +91,10 @@ public class DriveBase {
     public void drive(double forward, double strafe, double rotate){
 
         double lfPow, rfPow, lbPow, rbPow;
-        lfPow = -forward - strafe - rotate;
-        rfPow = forward - strafe - rotate;
-        lbPow = -forward + strafe - rotate;
-        rbPow = forward + strafe - rotate;
+        lfPow = forward - strafe - rotate;
+        rfPow = -forward - strafe - rotate;
+        lbPow = forward + strafe - rotate;
+        rbPow = -forward + strafe - rotate;
 
         double maxInput = 0;
 
@@ -129,6 +129,7 @@ public class DriveBase {
     {
         resetHeading(0);
     }
+
 
     public double getHeading()
     {return pose.getHeading();}
