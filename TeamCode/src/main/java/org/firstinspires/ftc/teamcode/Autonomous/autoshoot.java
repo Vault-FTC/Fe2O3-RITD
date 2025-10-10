@@ -1,15 +1,13 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
-import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.AppeaseCode.ArmBase;
 import org.firstinspires.ftc.teamcode.AppeaseCode.BetterIMU;
 import org.firstinspires.ftc.teamcode.AppeaseCode.DriveBase;
+import org.firstinspires.ftc.teamcode.AppeaseCode.Intake;
 import org.firstinspires.ftc.teamcode.AppeaseCode.MotorSpeeds;
 import org.firstinspires.ftc.teamcode.LimeLight;
 
@@ -17,6 +15,8 @@ import org.firstinspires.ftc.teamcode.LimeLight;
 public class autoshoot extends LinearOpMode {
     DriveBase driveBase;
     ArmBase armBase;
+
+    Intake intake;
     MotorSpeeds launchSpeed = MotorSpeeds.FIVE_EIGHTS;
 
     Location firstPosition = new Location(-24600, 0);
@@ -33,6 +33,7 @@ public class autoshoot extends LinearOpMode {
     public void runOpMode() {
         BetterIMU betterIMU = new BetterIMU(hardwareMap);
         driveBase = new DriveBase(betterIMU, hardwareMap, gamepad1);
+        intake = new Intake(hardwareMap);
         armBase = new ArmBase(hardwareMap);
         limelight = new LimeLight(hardwareMap, 20);
 
@@ -62,17 +63,21 @@ public class autoshoot extends LinearOpMode {
             {
                 driveBase.drive(0, 0, 0);
                 armBase.setSpeed(launchSpeed);
-                armBase.setKicker(true);
+                armBase.setShooter(true);
             }
             else if (time < 13)
             {
-                armBase.setKicker(true);
-                armBase.toggleFeed(0.5);
+                armBase.setShooter(true);
+                intake.spinTransfer(1);
+                intake.spinIntake(1);
+                intake.spinKicker(1);
             }
             else if(time < 15)
             {
                 //armBase.setKicker(false);
-                armBase.toggleFeed(0);
+                intake.spinTransfer(0);
+                intake.spinIntake(0);
+                intake.spinKicker(0);
             }
             else if(time < 20)
             {
