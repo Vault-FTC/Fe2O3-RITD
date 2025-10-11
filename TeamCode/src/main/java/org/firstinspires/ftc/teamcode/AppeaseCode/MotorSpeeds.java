@@ -6,7 +6,7 @@ public enum MotorSpeeds {
     THREE_QUARTERS(900),
     EIGHTY(1000),
     NINETY(1100),
-    FULL(1200);
+    FULL(600);
 
     public final double speed;
 

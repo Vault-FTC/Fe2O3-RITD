@@ -17,7 +17,7 @@ public class autoshoot extends LinearOpMode {
     ArmBase armBase;
 
     Intake intake;
-    MotorSpeeds launchSpeed = MotorSpeeds.FIVE_EIGHTS;
+    MotorSpeeds launchSpeed = MotorSpeeds.HALF;
 
     Location firstPosition = new Location(-24600, 0);
     Location secondPosition = new Location(-24600, -14000);
@@ -52,25 +52,25 @@ public class autoshoot extends LinearOpMode {
 
             LLResultTypes.FiducialResult result = limelight.getEitherResult();
             if(result != null) {
-                turnVal = result.getTargetXDegrees() * 0.05;
+                turnVal = result.getTargetXDegrees() * 0.045;
             }
 
-            if(time < 8)
+            if(time < 6)
             {
                 driveBase.driveToPosition(firstPosition, turnVal);
             }
-            else if (time < 10)
+            else if (time < 12)
             {
-                driveBase.drive(0, 0, 0);
+                driveBase.drive(0, 0, turnVal);
                 armBase.setSpeed(launchSpeed);
                 armBase.setShooter(true);
             }
-            else if (time < 13)
+            else if (time < 14)
             {
                 armBase.setShooter(true);
                 intake.spinTransfer(1);
                 intake.spinIntake(1);
-                intake.spinKicker(1);
+                intake.spinKicker(0.4);
             }
             else if(time < 15)
             {
@@ -78,6 +78,7 @@ public class autoshoot extends LinearOpMode {
                 intake.spinTransfer(0);
                 intake.spinIntake(0);
                 intake.spinKicker(0);
+                armBase.setShooter(false);
             }
             else if(time < 20)
             {
@@ -88,6 +89,7 @@ public class autoshoot extends LinearOpMode {
             }
 
             driveBase.update();
+            driveBase.updateValues(telemetry);
             armBase.execute();
 //            armBase.setSpeed(launchSpeed); //Three quarters speed at 900, starts in initialize
 //            armBase.execute();

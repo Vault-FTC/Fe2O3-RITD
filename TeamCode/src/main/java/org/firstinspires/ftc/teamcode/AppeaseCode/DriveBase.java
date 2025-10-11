@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.AppeaseCode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -27,10 +28,19 @@ public class DriveBase {
 
     public DriveBase(BetterIMU imu, HardwareMap hardwareMap, Gamepad drivePad)
     {
-        DcMotorEx rf = hardwareMap.get(DcMotorEx.class, "rf"); // 0
-        DcMotorEx lf = hardwareMap.get(DcMotorEx.class, "lf"); // 1
-        DcMotorEx rb = hardwareMap.get(DcMotorEx.class, "rb"); // 2
-        DcMotorEx lb = hardwareMap.get(DcMotorEx.class, "lb"); // 3
+        DcMotorEx rf = hardwareMap.get(DcMotorEx.class, "rf");
+        DcMotorEx lf = hardwareMap.get(DcMotorEx.class, "lf");
+        DcMotorEx rb = hardwareMap.get(DcMotorEx.class, "rb");
+        DcMotorEx lb = hardwareMap.get(DcMotorEx.class, "lb");
+
+        // Reverse one side of motors if needed (depends on robot configuration)
+        rf.setDirection(DcMotorEx.Direction.REVERSE);
+        rb.setDirection(DcMotorEx.Direction.REVERSE);
+        lf.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        odoLeft = () -> rb.getCurrentPosition(); // left
+        odoBack = () -> lb.getCurrentPosition(); // back
+        odoRight = () -> rf.getCurrentPosition(); // right
 
         lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -41,9 +51,6 @@ public class DriveBase {
         lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        odoRight = () ->  rb.getCurrentPosition(); // 2
-        odoLeft = () -> lb.getCurrentPosition(); // 3
-        odoBack = () -> rf.getCurrentPosition(); // 0
 
         driveMotors = new DcMotor[]{lf, rf, lb, rb};
 
@@ -59,8 +66,8 @@ public class DriveBase {
 
     public void driveToPosition(Location target, double turnVal)
     {
-        double p = 0.0002;
-        double strafe = (target.Strafe - odoBack.getAsInt());
+        double p = 0.0001;
+        double strafe = (target.Strafe + odoBack.getAsInt());
         double forward1 = (target.Forward - odoLeft.getAsInt());
         double forward2 = (target.Forward - odoRight.getAsInt());
         double forward = (forward1 + forward2) / 2;
@@ -72,7 +79,7 @@ public class DriveBase {
         {
             strafe = 0;
         }
-        drive(forward * p, strafe * p, turnVal);
+        drive(-forward * p, strafe * p, turnVal);
     }
 
     public void drive(double gge)
@@ -91,10 +98,16 @@ public class DriveBase {
     public void drive(double forward, double strafe, double rotate){
 
         double lfPow, rfPow, lbPow, rbPow;
-        lfPow = forward - strafe - rotate;
-        rfPow = -forward - strafe - rotate;
-        lbPow = forward + strafe - rotate;
-        rbPow = -forward + strafe - rotate;
+        lfPow = forward + strafe + rotate;
+        lbPow = forward - strafe + rotate;
+        rfPow = forward - strafe - rotate;
+        rbPow = forward + strafe - rotate;
+
+//        double frontLeftPower = rotatedY + rotatedX + rx;
+//        double backLeftPower = rotatedY - rotatedX + rx;
+//        double frontRightPower = rotatedY - rotatedX - rx;
+//        double backRightPower = rotatedY + rotatedX - rx;
+
 
         double maxInput = 0;
 
@@ -135,8 +148,8 @@ public class DriveBase {
     {return pose.getHeading();}
     public void updateValues(Telemetry telemetry)
     {
-        //telemetry.addData("Robot backOdo", odoBack.getAsInt() * pose.centimetersPerTick);
-        //telemetry.addData("Robot rightOdo", odoRight.getAsInt() * pose.centimetersPerTick);
-        //telemetry.addData("Robot leftOdo", odoLeft.getAsInt() * pose.centimetersPerTick);
+        telemetry.addData("Robot backOdo", odoBack.getAsInt() * pose.centimetersPerTick);
+        telemetry.addData("Robot rightOdo", odoRight.getAsInt() * pose.centimetersPerTick);
+        telemetry.addData("Robot leftOdo", odoLeft.getAsInt() * pose.centimetersPerTick);
     }
 }

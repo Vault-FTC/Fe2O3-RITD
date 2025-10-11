@@ -50,9 +50,9 @@ public class TestOpMode extends OpMode {
         DcMotorEx lb = hardwareMap.get(DcMotorEx.class, "lb"); // 2
         DcMotorEx rb = hardwareMap.get(DcMotorEx.class, "rb"); // 3
 
-        IntSupplier rightOdo = () -> rb.getCurrentPosition();
-        IntSupplier leftOdo = () -> lb.getCurrentPosition();
-        IntSupplier backOdo = () -> rf.getCurrentPosition();
+        IntSupplier rightOdo = () -> rb.getCurrentPosition(); // right to left
+        IntSupplier leftOdo = () -> lb.getCurrentPosition(); // left to back
+        IntSupplier backOdo = () -> rf.getCurrentPosition(); // back to right
 
         driveMotors = new DcMotor[]{rf, lf, rb, lb};
         for (DcMotor motor : driveMotors){
@@ -68,7 +68,7 @@ public class TestOpMode extends OpMode {
 
     @Override
     public void loop(){
-        //driveBase.updateValues(telemetry);
+        driveBase.updateValues(telemetry);
 
         LLResultTypes.FiducialResult result = limelight.getResult();
         double turnVal = 0;
@@ -92,17 +92,11 @@ public class TestOpMode extends OpMode {
             intake.spinIntake(0);
             intake.spinTransfer(0);
         }
-        if (gamepad1.x) {
-            intake.spinKicker(1);
-        }
-        else {
-            intake.spinKicker(0);
-        }
         if (gamepad1.a) {
-            intake.spinKicker(-1);
+            intake.spinKicker(1);
         }
         else {
-            intake.spinKicker(1);
+            intake.spinKicker(-1);
         }
 //        if(gamepad1.b) {
 //            driveBase.driveToPosition(new Location(0, 0), 0);
