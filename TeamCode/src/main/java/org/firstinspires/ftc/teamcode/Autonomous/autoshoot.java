@@ -17,7 +17,7 @@ public class autoshoot extends LinearOpMode {
     ArmBase armBase;
 
     Intake intake;
-    MotorSpeeds launchSpeed = MotorSpeeds.FIVE_EIGHTS;
+    MotorSpeeds launchSpeed = MotorSpeeds.NEAR;
 
     Location firstPosition = new Location(-24600, 0);
     Location secondPosition = new Location(-24600, -14000);
