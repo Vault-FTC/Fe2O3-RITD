@@ -3,16 +3,13 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import subsystems.Intake;
 import org.firstinspires.ftc.teamcode.AppeaseCode.MotorSpeeds;
-import org.firstinspires.ftc.teamcode.geometry.PoseEstimator;
 
 import subsystems.LimeLight;
+import subsystems.Shooter;
 import subsystems.driveallclass;
 
 
@@ -22,7 +19,6 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
     private DcMotorEx frmotor, flmotor, brmotor, blmotor;
     public LimeLight Limelight;
     Intake intake;
-    PoseEstimator poseEstimator;
 
     boolean last_y;
     boolean shooting;
@@ -35,19 +31,12 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
     public void runOpMode() {
         intake = new Intake(hardwareMap);
         driveallclass drive = new driveallclass(hardwareMap);
-        MotorSpeeds launchpower = MotorSpeeds.HALF;
+
+        Shooter launcher = new Shooter(hardwareMap);
+
+        MotorSpeeds launchpower = MotorSpeeds.NEAR;
 
         setTargets();
-        DcMotorEx shooter = hardwareMap.get(DcMotorEx.class, "shooter");
-
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
-        shooter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(300, 0, 0,0));
-        shooter.setPower(1.0);
-        shooter.setVelocity(0, AngleUnit.DEGREES);
 
         waitForStart();
         // poseEstimator.update();
@@ -57,9 +46,9 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
             double x = gamepad1.left_stick_x;  // Strafe left/right
             double rx = gamepad1.right_stick_x; // Rotation
 
-//            if (gamepad1.start) {
-//                poseEstimator.resetHeading(0);
-//            }
+            if (gamepad1.start) {
+                drive.resetHeading(0);
+            }
 
             if (!last_y && gamepad1.y) {
                 shooting = !shooting;
@@ -67,18 +56,18 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
             last_y = gamepad1.y;
 
             if(shooting) {
-                shooter.setVelocity(-launchpower.speed);
+                launcher.setShooterSpeed(launchpower);
             }
             else
             {
-                shooter.setVelocity(0);
+                launcher.setShooterSpeed(MotorSpeeds.ZERO);
             }
 
-//            if (gamepad1.x) {
-//                kick.setPower(0.5);
-//            } else {
-//                kick.setPower(0);
-//            }
+            if (gamepad1.x) {
+                launcher.toggleKicker(0.5);
+            } else {
+                launcher.toggleKicker(0);
+            }
 
             if (gamepad1.x) {
                 intake.spinKicker(0.75);
@@ -117,10 +106,10 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
             }
 
             if (gamepad1.dpad_up){
-                launchpower = MotorSpeeds.THREE_QUARTERS;
+                launchpower = MotorSpeeds.FAR;
             } //long shot
             if (gamepad1.dpad_down){
-                launchpower = MotorSpeeds.HALF;
+                launchpower = MotorSpeeds.NEAR;
             } //short shot
             if (gamepad1.dpad_left) {
                 launchpower = MotorSpeeds.FULL;
@@ -131,7 +120,7 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
 //            telemetry.addData("OdoBack", backOdo.getAsInt());
 //            telemetry.addData("OdoLeft", leftOdo.getAsInt());
 //            telemetry.addData("OdoRight", rightOdo.getAsInt());
-            telemetry.addData("shootSpeed", shooter.getVelocity());
+            telemetry.addData("shootSpeed", launcher.getShooterVelocity());
             // telemetry.addData("heading", Math.toDegrees(poseEstimator.getHeading()) % 360);
             //telemetry.addData("Shooting", shooting);
             telemetry.addData("LaunchPower", launchpower);

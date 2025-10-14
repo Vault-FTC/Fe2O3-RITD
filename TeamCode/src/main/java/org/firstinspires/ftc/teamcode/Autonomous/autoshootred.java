@@ -12,7 +12,7 @@ public class autoshootred extends autoshoot {
     {
         firstPosition = new Location(0, 0);
         secondPosition = new Location(7000,14000);
-        launchSpeed = MotorSpeeds.HALF;
+        launchSpeed = MotorSpeeds.NEAR;
         driveBase.resetHeading(65);
     }
 }

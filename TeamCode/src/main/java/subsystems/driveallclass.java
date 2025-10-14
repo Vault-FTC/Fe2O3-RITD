@@ -31,6 +31,10 @@ public class driveallclass {
         poseEstimator.resetHeading(0);
     }
 
+    public void resetHeading(double heading) {
+        poseEstimator.resetHeading(heading);
+    }
+
 
     public void drive(double rx, double x, double y) {
         double botHeading = poseEstimator.getHeading();

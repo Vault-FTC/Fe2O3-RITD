@@ -19,7 +19,7 @@ public class TestOpMode extends OpMode {
     DcMotor[] driveMotors;
     DriveBase driveBase;
     BetterIMU betterIMU;
-    MotorSpeeds launchSpeed = MotorSpeeds.HALF;
+    MotorSpeeds launchSpeed = MotorSpeeds.NEAR;
     ArmBase armBase;
     LimeLight limelight;
     Intake intake;

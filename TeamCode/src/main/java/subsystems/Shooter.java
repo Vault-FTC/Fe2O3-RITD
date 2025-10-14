@@ -10,9 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.AppeaseCode.MotorSpeeds;
 
 public class Shooter {
-    boolean spinShooter = false;
     boolean spinKicker = true;
-    double shooterSpeed;
     MotorSpeeds currentSpeed;
     private DcMotorEx kicker;
     private DcMotorEx shooter;
@@ -26,43 +24,59 @@ public class Shooter {
         shooter.setVelocity(0, AngleUnit.DEGREES);
     }
 
+//    public void shoot()
+//    {
+//        shooter.setVelocity();
+//    }
+//    public void intake()
+//    {
+//
+//    }
+
     public void setShooterSpeed(MotorSpeeds speed){
-        shooterSpeed = speed.speed;
         currentSpeed = speed;
+        shooter.setVelocity(-currentSpeed.speed, AngleUnit.DEGREES);
+    }
+
+
+    public void execute(boolean shoot) {
+        if (shoot) {
+            setShooterSpeed(currentSpeed);
+            if (Math.abs(shooter.getVelocity(AngleUnit.DEGREES) - currentSpeed.speed) < 100) {
+                toggleKicker(0.5);
+            }
+            else {
+                toggleKicker(0);
+            }
+        } else {
+            shooter.setVelocity(0);
+            kicker.setPower(0);
+        }
     }
 
     public void setShooterSpeedFromAprilTag() {
 
     }
-    public void setShooter(boolean on)
-    {
-        spinShooter = on;
-    }
-
-    public void toggleShooter(){
-        spinShooter = !spinShooter;
-    }
-
     public void toggleKicker(double speed)
     {
         kicker.setPower(speed);
     }
-    public void execute(){
-//        if (Math.abs(getGateError()) > .1){
-//            servo.setPosition(gateClosed ? 1. : 0.);
+//    public void execute(){
+////        if (Math.abs(getGateError()) > .1){
+////            servo.setPosition(gateClosed ? 1. : 0.);
+////        }
+//        if (spinShooter){
+//            shooter.setVelocity(-shooterSpeed, AngleUnit.DEGREES);
+//            //kicker.setPower(-kickSpeed);
+//        } else {
+//            shooter.setVelocity(0);
+//            //kicker.setPower(0);
 //        }
-        if (spinShooter){
-            shooter.setVelocity(-shooterSpeed, AngleUnit.DEGREES);
-            //kicker.setPower(-kickSpeed);
-        } else {
-            shooter.setVelocity(0);
-            //kicker.setPower(0);
-        }
-    }
+//    }
 
-    public MotorSpeeds getKickerVelocity()
+    public double getShooterVelocity()
     {
-        return currentSpeed;
+        return shooter.getVelocity(AngleUnit.DEGREES);
     }
 
     private double getGateError(){
