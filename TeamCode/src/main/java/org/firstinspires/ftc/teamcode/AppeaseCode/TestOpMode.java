@@ -1,23 +1,20 @@
 package org.firstinspires.ftc.teamcode.AppeaseCode;
 
-import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCaptureSequence;
-import org.firstinspires.ftc.teamcode.Autonomous.Location;
-import org.firstinspires.ftc.teamcode.LimeLight;
+import subsystems.LimeLight;
 
-import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
 
+import subsystems.Intake;
+
 @TeleOp(name = "Teleop Blue")
+@Disabled
 public class TestOpMode extends OpMode {
     DcMotor[] driveMotors;
     DriveBase driveBase;

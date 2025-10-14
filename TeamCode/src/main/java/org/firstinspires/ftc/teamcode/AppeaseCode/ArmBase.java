@@ -62,7 +62,7 @@ public class ArmBase {
 //            servo.setPosition(gateClosed ? 1. : 0.);
 //        }
         if (spinWheel){
-            shooter.setVelocity(-kickSpeed, AngleUnit.DEGREES);
+            shooter.setVelocity(-kickSpeed);
             //kicker.setPower(-kickSpeed);
         } else {
             shooter.setVelocity(0);

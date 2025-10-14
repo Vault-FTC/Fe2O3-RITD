@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.AppeaseCode.ArmBase;
 import org.firstinspires.ftc.teamcode.AppeaseCode.BetterIMU;
 import org.firstinspires.ftc.teamcode.AppeaseCode.DriveBase;
-import org.firstinspires.ftc.teamcode.AppeaseCode.Intake;
+import subsystems.Intake;
 import org.firstinspires.ftc.teamcode.AppeaseCode.MotorSpeeds;
-import org.firstinspires.ftc.teamcode.LimeLight;
+import subsystems.LimeLight;
 
 @Autonomous(name = "AutoShoot Near", group = "Blue Team")
 public class autoshoot extends LinearOpMode {
@@ -17,7 +17,7 @@ public class autoshoot extends LinearOpMode {
     ArmBase armBase;
 
     Intake intake;
-    MotorSpeeds launchSpeed = MotorSpeeds.HALF;
+    MotorSpeeds launchSpeed = MotorSpeeds.FIVE_EIGHTS;
 
     Location firstPosition = new Location(-24600, 0);
     Location secondPosition = new Location(-24600, -14000);

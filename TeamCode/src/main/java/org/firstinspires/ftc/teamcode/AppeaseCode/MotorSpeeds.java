@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.AppeaseCode;
 
 public enum MotorSpeeds {
-    HALF(600),
-    FIVE_EIGHTS(740),
-    THREE_QUARTERS(900),
+    THREE_EIGHTS(1000),
+    HALF(1100),
+    FIVE_EIGHTS(1200),
+    THREE_QUARTERS(1500),
     EIGHTY(1000),
-    NINETY(1100),
-    FULL(600);
+    NINETY(5400),
+    NINETY_FIVE(1400),
+    FULL(6000);
 
     public final double speed;
 
