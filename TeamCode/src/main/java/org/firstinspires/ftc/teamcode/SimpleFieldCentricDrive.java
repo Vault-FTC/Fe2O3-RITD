@@ -21,6 +21,8 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
     Intake intake;
 
     boolean last_y;
+
+    boolean last_dpad_up;
     boolean shooting;
 
     public void setTargets() {
@@ -105,15 +107,35 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
                 }
             }
 
-            if (gamepad1.dpad_up){
-                launchpower = MotorSpeeds.FAR;
-            } //long shot
+         if (!last_dpad_up && gamepad1.dpad_up) {
+             if (launchpower == MotorSpeeds.ZERO)
+
+             if (launchpower == MotorSpeeds.THREE_EIGHTS)
+
+                 if (launchpower == MotorSpeeds.HALF)
+
+                     if (launchpower == MotorSpeeds.FIVE_EIGHTS)
+
+                         if (launchpower == MotorSpeeds.THREE_QUARTERS)
+
+                             if (launchpower == MotorSpeeds.EIGHTY)
+
+                                 if (launchpower == MotorSpeeds.NINETY)
+
+                                     if (launchpower == MotorSpeeds.NINETY_FIVE)
+
+
+                launchpower = MotorSpeeds.THREE_QUARTERS;
+            }
+            last_dpad_up = gamepad1.dpad_up;
+            //long shot
             if (gamepad1.dpad_down){
                 launchpower = MotorSpeeds.NEAR;
             } //short shot
             if (gamepad1.dpad_left) {
                 launchpower = MotorSpeeds.FULL;
             }
+
 
             drive.drive(rx, x, y);
 

@@ -21,7 +21,6 @@ public class PoseEstimator {
     private int prevRight = 0;
     private int prevBack = 0;
 
-
     public PoseEstimator(IntSupplier left, IntSupplier right, IntSupplier back) {
         this.leftOdo = left;
         this.rightOdo = right;
