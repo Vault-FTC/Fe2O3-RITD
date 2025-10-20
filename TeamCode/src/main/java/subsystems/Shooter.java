@@ -19,7 +19,7 @@ public class Shooter {
         shooter = hardwareMap.get(DcMotorEx.class, "shooter");
         shooter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(300, 0, 0,0));
+        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(800, 0, 0,0));
         shooter.setPower(1.0);
         shooter.setVelocity(0, AngleUnit.DEGREES);
     }
@@ -39,9 +39,9 @@ public class Shooter {
     }
 
 
-    public void execute(boolean shoot) {
+    public void execute(boolean shoot, MotorSpeeds motorSpeed) {
         if (shoot) {
-            setShooterSpeed(currentSpeed);
+            setShooterSpeed(motorSpeed);
             if (Math.abs(shooter.getVelocity(AngleUnit.DEGREES) - currentSpeed.speed) < 100) {
                 toggleKicker(0.5);
             }

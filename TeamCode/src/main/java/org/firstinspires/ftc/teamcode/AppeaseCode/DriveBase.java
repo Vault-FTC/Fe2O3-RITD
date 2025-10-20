@@ -67,7 +67,7 @@ public class DriveBase {
     public void driveToPosition(Location target, double turnVal)
     {
         double p = 0.0001;
-        double strafe = (target.Strafe + odoBack.getAsInt());
+        double strafe = (target.Strafe + (odoBack.getAsInt()));
         double forward1 = (target.Forward - odoLeft.getAsInt());
         double forward2 = (target.Forward - odoRight.getAsInt());
         double forward = (forward1 + forward2) / 2;

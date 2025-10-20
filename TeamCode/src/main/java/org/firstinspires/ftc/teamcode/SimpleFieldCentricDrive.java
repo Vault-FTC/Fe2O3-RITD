@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import subsystems.Intake;
 import org.firstinspires.ftc.teamcode.AppeaseCode.MotorSpeeds;
+import org.firstinspires.ftc.teamcode.geometry.PoseEstimator;
 
 import subsystems.LimeLight;
 import subsystems.Shooter;
@@ -19,10 +20,11 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
     private DcMotorEx frmotor, flmotor, brmotor, blmotor;
     public LimeLight Limelight;
     Intake intake;
+    PoseEstimator poseEstimator;
 
     boolean last_y;
 
-    boolean last_dpad_up;
+    boolean last_dpad_up, last_dpad_down;
     boolean shooting;
 
     public void setTargets() {
@@ -57,32 +59,17 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
             }
             last_y = gamepad1.y;
 
-            if(shooting) {
-                launcher.setShooterSpeed(launchpower);
-            }
-            else
-            {
-                launcher.setShooterSpeed(MotorSpeeds.ZERO);
-            }
-
-            if (gamepad1.x) {
-                launcher.toggleKicker(0.5);
-            } else {
-                launcher.toggleKicker(0);
-            }
-
             if (gamepad1.x) {
                 intake.spinKicker(0.75);
-                intake.spinIntake(0.9);
-                intake.spinTransfer(0.9);
-            }
-            else if (gamepad1.left_bumper) {
-                intake.spinIntake(0.9);
-                intake.spinTransfer(0.9);
+                intake.spinIntake(0.95);
+                intake.spinTransfer(0.95);
+            } else if (gamepad1.left_bumper) {
+                intake.spinIntake(0.95);
+                intake.spinTransfer(0.95);
                 intake.spinKicker(-0.75);
             } else if (gamepad1.b) {
-                intake.spinIntake(-0.9);
-                intake.spinTransfer(-0.9);
+                intake.spinIntake(-0.95);
+                intake.spinTransfer(-0.95);
                 intake.spinKicker(-0.75);
             } else {
                 intake.spinKicker(0);
@@ -94,42 +81,53 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
             if (gamepad1.right_bumper) {
                 rx = rx + Limelight.getTx() / 1.5;
                 LLResultTypes.FiducialResult judge = Limelight.getResult();
-                if (judge == null)
-                {
+                if (judge == null) {
 
+                } else {
+                    double range = Math.abs(judge.getCameraPoseTargetSpace().getPosition().z);
+                    // launchpower = 0.4 + range / 4;
+                    // was 0.3
+                    telemetry.addData("fff", launchpower);
+                    if (judge.getCameraPoseTargetSpace().getPosition().x < 5) {
+                        launcher.execute(true, MotorSpeeds.NEAR);
+                    }
                 }
-                else
-                {
-                   double range = Math.abs(judge.getCameraPoseTargetSpace().getPosition().z);
-                   // launchpower = 0.4 + range / 4;
-                   // was 0.3
-                   telemetry.addData("fff", launchpower);
+            } else {
+                if (shooting) {
+                    launcher.setShooterSpeed(launchpower);
+                } else {
+                    launcher.setShooterSpeed(MotorSpeeds.ZERO);
+                }
+
+                if (gamepad1.x) {
+                    launcher.toggleKicker(0.5);
+                } else {
+                    launcher.toggleKicker(0);
                 }
             }
 
-         if (!last_dpad_up && gamepad1.dpad_up) {
-             if (launchpower == MotorSpeeds.ZERO)
-
-             if (launchpower == MotorSpeeds.THREE_EIGHTS)
-
-                 if (launchpower == MotorSpeeds.HALF)
-
-                     if (launchpower == MotorSpeeds.FIVE_EIGHTS)
-
-                         if (launchpower == MotorSpeeds.THREE_QUARTERS)
-
-                             if (launchpower == MotorSpeeds.EIGHTY)
-
-                                 if (launchpower == MotorSpeeds.NINETY)
-
-                                     if (launchpower == MotorSpeeds.NINETY_FIVE)
-
-
-                launchpower = MotorSpeeds.THREE_QUARTERS;
+            if (!last_dpad_up && gamepad1.dpad_up) {
+                int newVal = launchpower.ordinal() + 1;
+                if (newVal >= MotorSpeeds.values().length)
+                {
+                    newVal = MotorSpeeds.values().length - 1;
+                }
+                launchpower = MotorSpeeds.values()[newVal];
             }
+            if (!last_dpad_down && gamepad1.dpad_down) {
+                int newVal = launchpower.ordinal() - 1;
+                if (newVal < 0)
+                {
+                    newVal = 0;
+                }
+                launchpower = MotorSpeeds.values()[newVal];
+            }
+
             last_dpad_up = gamepad1.dpad_up;
+            last_dpad_down = gamepad1.dpad_down;
+
             //long shot
-            if (gamepad1.dpad_down){
+            if (gamepad1.dpad_down) {
                 launchpower = MotorSpeeds.NEAR;
             } //short shot
             if (gamepad1.dpad_left) {
@@ -146,6 +144,7 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
             // telemetry.addData("heading", Math.toDegrees(poseEstimator.getHeading()) % 360);
             //telemetry.addData("Shooting", shooting);
             telemetry.addData("LaunchPower", launchpower);
+            telemetry.addData("Position", drive.getPosition());
             telemetry.update();
 //            poseEstimator.update();
         }

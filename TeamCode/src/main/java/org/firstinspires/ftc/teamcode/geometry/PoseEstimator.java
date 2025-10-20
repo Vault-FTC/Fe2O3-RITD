@@ -7,7 +7,7 @@ import java.util.function.IntSupplier;
 public class PoseEstimator {
     // Constants
     double trackWidth = 15.15 * 2.54 / (1.09);// * 1165 / (Math.PI * 2);
-    double strafeOffset = 7.25;
+    double strafeOffset = 7.25 * 2.54;
     double ticksPerInch = 0.0013482;
 
     public double centimetersPerTick =  (3.2 * Math.PI) / 2000;

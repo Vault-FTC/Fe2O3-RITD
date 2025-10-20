@@ -4,12 +4,14 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.Autonomous.Location;
 import org.firstinspires.ftc.teamcode.geometry.PoseEstimator;
 
 import java.util.function.IntSupplier;
 
 public class driveallclass {
     private DcMotorEx frmotor, flmotor, brmotor, blmotor;
+    IntSupplier rightOdo, leftOdo, backOdo;
     PoseEstimator poseEstimator;
     public driveallclass(HardwareMap hardwareMap) {
         frmotor = hardwareMap.get(DcMotorEx.class, "rf");
@@ -22,9 +24,9 @@ public class driveallclass {
         brmotor.setDirection(DcMotorEx.Direction.REVERSE);
         flmotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        IntSupplier leftOdo = () -> brmotor.getCurrentPosition(); // left
-        IntSupplier backOdo = () -> blmotor.getCurrentPosition(); // back
-        IntSupplier rightOdo = () -> frmotor.getCurrentPosition(); // right
+        leftOdo = () -> brmotor.getCurrentPosition(); // left
+        backOdo = () -> blmotor.getCurrentPosition(); // back
+        rightOdo = () -> frmotor.getCurrentPosition(); // right
 
         poseEstimator = new PoseEstimator(leftOdo, rightOdo, backOdo);
         poseEstimator.update();
@@ -35,6 +37,9 @@ public class driveallclass {
         poseEstimator.resetHeading(heading);
     }
 
+    public String getPosition() {
+        return "X: " + poseEstimator.getGlobalX() + " Y: " + poseEstimator.getGlobalY() + " Heading: " + poseEstimator.getHeading();
+    }
 
     public void drive(double rx, double x, double y) {
         double botHeading = poseEstimator.getHeading();
@@ -66,5 +71,23 @@ public class driveallclass {
         blmotor.setPower(backRightPower);
 
         poseEstimator.update();
+    }
+
+    public void driveToPosition(Location target, double turnVal)
+    {
+        double p = 0.0001;
+        double strafe = (target.Strafe + (backOdo.getAsInt() * poseEstimator.centimetersPerTick));
+        double forward1 = (target.Forward - (leftOdo.getAsInt() * poseEstimator.centimetersPerTick));
+        double forward2 = (target.Forward - (rightOdo.getAsInt() * poseEstimator.centimetersPerTick));
+        double forward = (forward1 + forward2) / 2;
+        if(Math.abs(forward) <  400)
+        {
+            forward = 0;
+        }
+        if(Math.abs(strafe) < 400)
+        {
+            strafe = 0;
+        }
+        drive(-forward * p, strafe * p, turnVal);
     }
 }
