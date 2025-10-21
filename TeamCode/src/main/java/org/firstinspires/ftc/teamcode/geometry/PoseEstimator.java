@@ -7,7 +7,7 @@ import java.util.function.IntSupplier;
 public class PoseEstimator {
     // Constants
     double trackWidth = 15.15 * 2.54 / (1.09);// * 1165 / (Math.PI * 2); //14 *2.54
-    double strafeOffset = 7.25 * 2.54; // 6 * 2.54
+    double strafeOffset = 15; //cm
     double ticksPerInch = 0.0013482;
 
     public double centimetersPerTick =  (3.2 * Math.PI) / 2000;
@@ -64,12 +64,12 @@ public class PoseEstimator {
         double deltaRightCentimeters = deltaRight * centimetersPerTick;
         double deltaBackCentimeters = deltaBack * centimetersPerTick;
 
-        double deltaTheta = ((deltaRightCentimeters - deltaLeftCentimeters) / trackWidth) / 4;
+        double deltaTheta = ((deltaRightCentimeters - deltaLeftCentimeters) / trackWidth); // tried deleting the divide by 4 to see if it would fix heading calculations
 
         heading += deltaTheta;
 
-        double localDeltaX = (deltaLeftCentimeters + deltaRightCentimeters) / 2;
-        double localDeltaY = deltaBackCentimeters - (deltaTheta * strafeOffset);
+        double localDeltaY = (deltaLeftCentimeters + deltaRightCentimeters) / 2;
+        double localDeltaX = deltaBackCentimeters - (deltaTheta * strafeOffset);
         double globalDeltaX = (localDeltaX * Math.cos(heading) - localDeltaY * Math.sin(heading));
         double globalDeltaY = localDeltaX * Math.sin(heading) + localDeltaY * Math.cos(heading);
         x += globalDeltaX;

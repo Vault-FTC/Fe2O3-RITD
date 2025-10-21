@@ -1,5 +1,6 @@
 package subsystems;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -21,13 +22,23 @@ public class driveallclass {
         brmotor = hardwareMap.get(DcMotorEx.class, "rb");
         blmotor = hardwareMap.get(DcMotorEx.class, "lb");
 
+        frmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        flmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        brmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        blmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        flmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        brmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        blmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
 // Reverse one side of motors if needed (depends on robot configuration)
         frmotor.setDirection(DcMotorEx.Direction.REVERSE);
         brmotor.setDirection(DcMotorEx.Direction.REVERSE);
         flmotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         leftOdo = () -> brmotor.getCurrentPosition(); // left
-        backOdo = () -> blmotor.getCurrentPosition(); // back
+        backOdo = () -> -blmotor.getCurrentPosition(); // back
         rightOdo = () -> frmotor.getCurrentPosition(); // right
 
         poseEstimator = new PoseEstimator(leftOdo, rightOdo, backOdo);
@@ -40,7 +51,7 @@ public class driveallclass {
     }
 
     public String getPosition() {
-        return "X: " + poseEstimator.getGlobalX() + " Y: " + poseEstimator.getGlobalY() + " Heading: " + poseEstimator.getHeading();
+        return "X: " + poseEstimator.getGlobalX() + " Y: " + poseEstimator.getGlobalY() + " Heading: " + Math.toDegrees(poseEstimator.getHeading());
     }
 
     public void drive(double forward, double right, double rotate) {
@@ -98,12 +109,19 @@ public class driveallclass {
 
     public void driveToPosition(Location target, double turnVal, Telemetry telemetry) {
         double p = 0.004;
-        double strafe = (target.Strafe - poseEstimator.getGlobalY());
-        double forward = (target.Forward - poseEstimator.getGlobalX());
+        double strafe = (target.Strafe - poseEstimator.getGlobalX());
+        double forward = (target.Forward + poseEstimator.getGlobalY());
 
         if (telemetry != null) {
             telemetry.addData("Strafe", strafe);
             telemetry.addData("Forward", forward);
+        }
+
+        double distance = Math.hypot(forward,strafe);
+
+        if (distance < 10) {
+            drive(0,0,0);
+            return;
         }
 
         drive(forward * p, strafe * p, turnVal);
@@ -118,6 +136,8 @@ public class driveallclass {
         telemetry.addData("Robot backOdo", backOdo.getAsInt() * poseEstimator.centimetersPerTick);
         telemetry.addData("Robot rightOdo", rightOdo.getAsInt() * poseEstimator.centimetersPerTick);
         telemetry.addData("Robot leftOdo", leftOdo.getAsInt() * poseEstimator.centimetersPerTick);
+        telemetry.addData("Robot GlobalX", poseEstimator.getGlobalX());
+        telemetry.addData("Robot GlobalY", poseEstimator.getGlobalY());
         telemetry.addData("Robot backOdo ticks ", backOdo.getAsInt());
         telemetry.addData("Robot rightOdo ticks", rightOdo.getAsInt());
         telemetry.addData("Robot leftOdo ticks", leftOdo.getAsInt());

@@ -106,25 +106,25 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
                 }
             }
 
-            if (!last_dpad_up && gamepad1.dpad_up) {
-                int newVal = launchpower.ordinal() + 1;
-                if (newVal >= MotorSpeeds.values().length)
-                {
-                    newVal = MotorSpeeds.values().length - 1;
-                }
-                launchpower = MotorSpeeds.values()[newVal];
-            }
-            if (!last_dpad_down && gamepad1.dpad_down) {
-                int newVal = launchpower.ordinal() - 1;
-                if (newVal < 0)
-                {
-                    newVal = 0;
-                }
-                launchpower = MotorSpeeds.values()[newVal];
-            }
-
-            last_dpad_up = gamepad1.dpad_up;
-            last_dpad_down = gamepad1.dpad_down;
+//            if (!last_dpad_up && gamepad1.dpad_up) {
+//                int newVal = launchpower.ordinal() + 1;
+//                if (newVal >= MotorSpeeds.values().length)
+//                {
+//                    newVal = MotorSpeeds.values().length - 1;
+//                }
+//                launchpower = MotorSpeeds.values()[newVal];
+//            }
+//            if (!last_dpad_down && gamepad1.dpad_down) {
+//                int newVal = launchpower.ordinal() - 1;
+//                if (newVal < 0)
+//                {
+//                    newVal = 0;
+//                }
+//                launchpower = MotorSpeeds.values()[newVal];
+//            }
+//
+//            last_dpad_up = gamepad1.dpad_up;
+//            last_dpad_down = gamepad1.dpad_down;
 
             //long shot
             if (gamepad1.dpad_down) {

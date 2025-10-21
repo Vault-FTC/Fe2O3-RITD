@@ -48,7 +48,7 @@ public class autoshoot extends LinearOpMode {
         armBase = new ArmBase(hardwareMap);
         limelight = new LimeLight(hardwareMap, 20);
 
-        driveallclass.resetHeading(45);
+        driveallclass.resetHeading(0);
 
         setTargets();
 
