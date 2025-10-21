@@ -6,8 +6,8 @@ import java.util.function.IntSupplier;
 
 public class PoseEstimator {
     // Constants
-    double trackWidth = 15.15 * 2.54 / (1.09);// * 1165 / (Math.PI * 2);
-    double strafeOffset = 7.25 * 2.54;
+    double trackWidth = 15.15 * 2.54 / (1.09);// * 1165 / (Math.PI * 2); //14 *2.54
+    double strafeOffset = 7.25 * 2.54; // 6 * 2.54
     double ticksPerInch = 0.0013482;
 
     public double centimetersPerTick =  (3.2 * Math.PI) / 2000;
@@ -46,6 +46,7 @@ public class PoseEstimator {
     }
 
     public void update() {
+        // ticks
         int currentLeft = leftOdo.getAsInt();
         int currentRight = rightOdo.getAsInt();
         int currentBack = backOdo.getAsInt();
@@ -58,16 +59,17 @@ public class PoseEstimator {
         prevRight = currentRight;
         prevBack = currentBack;
 
-        double deltaLeftInches = deltaLeft * centimetersPerTick;
-        double deltaRightInches = deltaRight * centimetersPerTick;
-        double deltaBackInches = deltaBack * centimetersPerTick;
+        // cm
+        double deltaLeftCentimeters = deltaLeft * centimetersPerTick;
+        double deltaRightCentimeters = deltaRight * centimetersPerTick;
+        double deltaBackCentimeters = deltaBack * centimetersPerTick;
 
-        double deltaTheta = (deltaRightInches - deltaLeftInches) / trackWidth;
+        double deltaTheta = ((deltaRightCentimeters - deltaLeftCentimeters) / trackWidth) / 4;
 
         heading += deltaTheta;
 
-        double localDeltaX = (deltaLeftInches + deltaRightInches) / 2;
-        double localDeltaY = deltaBackInches - (deltaTheta * strafeOffset);
+        double localDeltaX = (deltaLeftCentimeters + deltaRightCentimeters) / 2;
+        double localDeltaY = deltaBackCentimeters - (deltaTheta * strafeOffset);
         double globalDeltaX = (localDeltaX * Math.cos(heading) - localDeltaY * Math.sin(heading));
         double globalDeltaY = localDeltaX * Math.sin(heading) + localDeltaY * Math.cos(heading);
         x += globalDeltaX;

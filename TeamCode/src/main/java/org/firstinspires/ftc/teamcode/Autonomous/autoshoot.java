@@ -10,17 +10,18 @@ import org.firstinspires.ftc.teamcode.AppeaseCode.DriveBase;
 import subsystems.Intake;
 import org.firstinspires.ftc.teamcode.AppeaseCode.MotorSpeeds;
 import subsystems.LimeLight;
+import subsystems.driveallclass;
 
 @Autonomous(name = "AutoShoot Near", group = "Blue Team")
 public class autoshoot extends LinearOpMode {
-    DriveBase driveBase;
+    driveallclass driveallclass;
     ArmBase armBase;
 
     Intake intake;
     MotorSpeeds launchSpeed = MotorSpeeds.NEAR;
 
-    Location firstPosition = new Location(-24600, 0);
-    Location secondPosition = new Location(-24600, -14000);
+    Location firstPosition = new Location(-130, 0);
+    Location secondPosition = new Location(-130, 100);
 
     LimeLight limelight;
 
@@ -32,17 +33,19 @@ public class autoshoot extends LinearOpMode {
     @Override
     public void runOpMode() {
         BetterIMU betterIMU = new BetterIMU(hardwareMap);
-        driveBase = new DriveBase(betterIMU, hardwareMap, gamepad1);
+        driveallclass = new driveallclass(hardwareMap);
         intake = new Intake(hardwareMap);
         armBase = new ArmBase(hardwareMap);
         limelight = new LimeLight(hardwareMap, 20);
 
-        driveBase.resetHeading(45);
+        driveallclass.resetHeading(45);
 
         setTargets();
 
         waitForStart();
         resetRuntime();
+
+
 
         while (opModeIsActive() && !isStopRequested()) {
 
@@ -57,11 +60,12 @@ public class autoshoot extends LinearOpMode {
 
             if(time < 6)
             {
-                driveBase.driveToPosition(firstPosition, turnVal);
+
+                driveallclass.driveToPosition(firstPosition, 0, telemetry);
             }
             else if (time < 12)
             {
-                driveBase.drive(0, 0, turnVal);
+                driveallclass.drive(0, 0, turnVal);
                 armBase.setSpeed(launchSpeed);
                 armBase.setShooter(true);
             }
@@ -82,18 +86,19 @@ public class autoshoot extends LinearOpMode {
             }
             else if(time < 20)
             {
-                driveBase.driveToPosition(secondPosition, 0);
+                driveallclass.driveToPosition(secondPosition, 0, null);
             }
             else if(time < 22) {
-                driveBase.drive(0, 0, 0);
+                driveallclass.drive(0, 0, 0);
             }
 
-            driveBase.update();
-            driveBase.updateValues(telemetry);
+            driveallclass.update();
+            driveallclass.updateValues(telemetry);
             armBase.execute();
 //            armBase.setSpeed(launchSpeed); //Three quarters speed at 900, starts in initialize
 //            armBase.execute();
 //            armBase.toggleFeed(0.5); // starts when we
+            telemetry.update();
         }
     }
 }

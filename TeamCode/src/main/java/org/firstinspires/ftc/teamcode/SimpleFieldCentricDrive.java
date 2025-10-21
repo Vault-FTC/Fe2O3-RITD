@@ -46,9 +46,9 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
         // poseEstimator.update();
         while (opModeIsActive()) {
 
-            double y = gamepad1.left_stick_y; // Forward/backward
-            double x = gamepad1.left_stick_x;  // Strafe left/right
-            double rx = gamepad1.right_stick_x; // Rotation
+            double joystick_y = gamepad1.left_stick_y; // Forward/backward
+            double joystick_x = gamepad1.left_stick_x;  // Strafe left/right
+            double rx = -gamepad1.right_stick_x; // Rotation
 
             if (gamepad1.start) {
                 drive.resetHeading(0);
@@ -135,7 +135,7 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
             }
 
 
-            drive.drive(rx, x, y);
+            drive.drive(joystick_y, joystick_x, rx);
 
 //            telemetry.addData("OdoBack", backOdo.getAsInt());
 //            telemetry.addData("OdoLeft", leftOdo.getAsInt());
@@ -146,7 +146,7 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
             telemetry.addData("LaunchPower", launchpower);
             telemetry.addData("Position", drive.getPosition());
             telemetry.update();
-//            poseEstimator.update();
+            drive.updateValues(telemetry);
         }
     }
 }

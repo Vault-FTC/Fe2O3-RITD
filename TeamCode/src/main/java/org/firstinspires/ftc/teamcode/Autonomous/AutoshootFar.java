@@ -13,6 +13,6 @@ public class AutoshootFar extends autoshoot {
         firstPosition = new Location(0, 0);
         secondPosition = new Location(7000,-14000);
         launchSpeed = MotorSpeeds.FAR;
-        driveBase.resetHeading(65);
+        driveallclass.resetHeading(65);
     }
 }
