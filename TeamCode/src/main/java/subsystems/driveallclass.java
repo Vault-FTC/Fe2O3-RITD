@@ -108,13 +108,16 @@ public class driveallclass {
 //    }
 
     public void driveToPosition(Location target, double turnVal, Telemetry telemetry) {
-        double p = 0.004;
+        double p = 0.04;
+        double p_rotation = 0.03;
         double strafe = (target.Strafe - poseEstimator.getGlobalX());
-        double forward = (target.Forward + poseEstimator.getGlobalY());
+        double forward = (-target.Forward + poseEstimator.getGlobalY());
+        double heading = (target.TurnDegrees - Math.toDegrees(poseEstimator.getHeading()));
 
         if (telemetry != null) {
-            telemetry.addData("Strafe", strafe);
-            telemetry.addData("Forward", forward);
+            telemetry.addData("Target Strafe", strafe);
+            telemetry.addData("Target Forward", forward);
+            telemetry.addData("Target Heading", heading);
         }
 
         double distance = Math.hypot(forward,strafe);
@@ -124,7 +127,7 @@ public class driveallclass {
             return;
         }
 
-        drive(forward * p, strafe * p, turnVal);
+        drive(forward * p, strafe * p, heading * p_rotation);
 
     }
     public void update()

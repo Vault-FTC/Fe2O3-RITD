@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import subsystems.Intake;
 import org.firstinspires.ftc.teamcode.AppeaseCode.MotorSpeeds;
+import org.firstinspires.ftc.teamcode.Autonomous.Location;
 import org.firstinspires.ftc.teamcode.geometry.PoseEstimator;
 
 import subsystems.LimeLight;
@@ -134,8 +135,13 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
                 launchpower = MotorSpeeds.FULL;
             }
 
+            if (gamepad1.back) {
+                drive.driveToPosition(new Location(0,0,0), 0 ,telemetry);
+            }
+            else {
+                drive.drive(joystick_y, joystick_x, rx);
+            }
 
-            drive.drive(joystick_y, joystick_x, rx);
 
 //            telemetry.addData("OdoBack", backOdo.getAsInt());
 //            telemetry.addData("OdoLeft", leftOdo.getAsInt());
