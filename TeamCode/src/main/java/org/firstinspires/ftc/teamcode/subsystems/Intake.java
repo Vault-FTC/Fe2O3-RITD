@@ -3,7 +3,10 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class Intake {
+import org.firstinspires.ftc.teamcode.CommandSystem.Command;
+import org.firstinspires.ftc.teamcode.CommandSystem.Subsystem;
+
+public class Intake extends Subsystem {
     private DcMotor intake;
     private DcMotor transfer;
     private DcMotor kicker;

@@ -7,11 +7,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Autonomous.Location;
+import org.firstinspires.ftc.teamcode.CommandSystem.Subsystem;
 import org.firstinspires.ftc.teamcode.geometry.PoseEstimator;
 
 import java.util.function.IntSupplier;
 
-public class driveallclass {
+public class driveallclass extends Subsystem {
     private DcMotorEx frmotor, flmotor, brmotor, blmotor;
     IntSupplier rightOdo, leftOdo, backOdo;
     PoseEstimator poseEstimator;
@@ -108,11 +109,12 @@ public class driveallclass {
 //    }
 
     public void driveToPosition(Location target, double turnVal, Telemetry telemetry) {
-        double p = 0.04;
+        double p = 0.005;
         double p_rotation = 0.03;
         double strafe = (target.Strafe - poseEstimator.getGlobalX());
         double forward = (-target.Forward + poseEstimator.getGlobalY());
         double heading = (target.TurnDegrees - Math.toDegrees(poseEstimator.getHeading()));
+
 
         if (telemetry != null) {
             telemetry.addData("Target Strafe", strafe);
@@ -129,6 +131,13 @@ public class driveallclass {
 
         drive(forward * p, strafe * p, heading * p_rotation);
 
+    }
+
+    public boolean isAtPosition(Location target) {
+        double currentX = poseEstimator.getGlobalX();
+        double currentY = poseEstimator.getGlobalY();
+        double tolerance = 10;
+        return Math.abs(currentX-target.Strafe) < tolerance && Math.abs(currentY - target.Forward) < tolerance;
     }
     public void update()
     {

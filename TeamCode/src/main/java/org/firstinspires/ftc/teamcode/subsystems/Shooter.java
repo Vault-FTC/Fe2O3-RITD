@@ -6,8 +6,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.CommandSystem.Command;
+import org.firstinspires.ftc.teamcode.CommandSystem.Subsystem;
 
-public class Shooter {
+public class Shooter extends Subsystem {
     boolean spinKicker = true;
     MotorSpeeds currentSpeed;
     private DcMotorEx kicker;

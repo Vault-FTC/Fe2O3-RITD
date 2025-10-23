@@ -4,6 +4,7 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.CommandSystem.CommandScheduler;
 import org.firstinspires.ftc.teamcode.Old.BetterIMU;
 
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -16,7 +17,7 @@ import org.firstinspires.ftc.teamcode.subsystems.driveallclass;
 public class autoshoot extends LinearOpMode {
     driveallclass driveallclass;
     Shooter shooter;
-
+    CommandScheduler scheduler = CommandScheduler.getInstance();
     Intake intake;
     MotorSpeeds launchSpeed = MotorSpeeds.NEAR;
 
@@ -48,6 +49,7 @@ public class autoshoot extends LinearOpMode {
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap);
         limelight = new LimeLight(hardwareMap, 20);
+        scheduler.clearRegistry();
 
         driveallclass.resetHeading(0);
 
@@ -58,7 +60,7 @@ public class autoshoot extends LinearOpMode {
 
 
         while (opModeIsActive() && !isStopRequested()) {
-
+            scheduler.run();
             double time = getRuntime();
 
             double turnVal = 0;
