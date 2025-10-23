@@ -1,9 +1,8 @@
-package org.firstinspires.ftc.teamcode.AppeaseCode;
+package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import subsystems.LimeLight;
-import org.firstinspires.ftc.teamcode.SimpleFieldCentricDrive;
+import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 
 @TeleOp(name = "TeleOp Red", group = "Concept")
 public class teleopred extends SimpleFieldCentricDrive {

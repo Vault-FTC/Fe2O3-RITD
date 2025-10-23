@@ -4,14 +4,13 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.AppeaseCode.ArmBase;
-import org.firstinspires.ftc.teamcode.AppeaseCode.BetterIMU;
+import org.firstinspires.ftc.teamcode.Old.BetterIMU;
 
-import subsystems.Intake;
-import org.firstinspires.ftc.teamcode.AppeaseCode.MotorSpeeds;
-import subsystems.LimeLight;
-import subsystems.Shooter;
-import subsystems.driveallclass;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.MotorSpeeds;
+import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.driveallclass;
 
 @Autonomous(name = "AutoShoot Near", group = "Blue Team")
 public class autoshoot extends LinearOpMode {
@@ -73,7 +72,7 @@ public class autoshoot extends LinearOpMode {
 // the 3 was 6
                 driveallclass.driveToPosition(firstPosition, 0, telemetry);
             } else if (time < 6) {//the 6 was 12
-                driveallclass.drive(0, 0, turnVal);
+                driveallclass.drive(0, 0, 0);
                 shooter.setShooterSpeed(launchSpeed);
             } else if (time < 14) {//the 7 was 14
                 intake.spinTransfer(1);
@@ -86,7 +85,7 @@ public class autoshoot extends LinearOpMode {
                 intake.spinKicker(0);
                 shooter.setShooterSpeed(MotorSpeeds.ZERO);
             } else if (time < 18) {//the 10 was 20
-                driveallclass.driveToPosition(secondPosition, 0, null);
+                driveallclass.driveToPosition(secondPosition, 0, telemetry);
             } else if (time < 20) {
                 driveallclass.driveToPosition(thirdPosition, 0, telemetry);
             } else if (time < 22) {// the 18 was 22

@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.AppeaseCode.MotorSpeeds;
 @Autonomous(name = "AutoShoot red near", group = "Red Team")
 public class AutoshootRedNear extends autoshoot {
 

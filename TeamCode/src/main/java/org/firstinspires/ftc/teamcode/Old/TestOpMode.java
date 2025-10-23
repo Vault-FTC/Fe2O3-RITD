@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.AppeaseCode;
+package org.firstinspires.ftc.teamcode.Old;
 
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -7,11 +7,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import subsystems.LimeLight;
+import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 
 import java.util.function.IntSupplier;
 
-import subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.MotorSpeeds;
 
 @TeleOp(name = "Teleop Blue")
 @Disabled

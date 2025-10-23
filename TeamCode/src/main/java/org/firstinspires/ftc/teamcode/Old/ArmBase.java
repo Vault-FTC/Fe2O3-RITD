@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.AppeaseCode;
+package org.firstinspires.ftc.teamcode.Old;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
+import org.firstinspires.ftc.teamcode.subsystems.MotorSpeeds;
 
 public class ArmBase {
     boolean spinWheel = false;
