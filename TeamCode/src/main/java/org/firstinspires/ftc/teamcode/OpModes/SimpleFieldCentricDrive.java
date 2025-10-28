@@ -66,8 +66,8 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
                 intake.spinTransfer(0.95);
             } else if (gamepad1.left_bumper) {
                 intake.spinIntake(0.95);
-                intake.spinTransfer(0.95);
-                intake.spinKicker(-0.75);
+                intake.spinTransfer(0.6);
+                intake.spinKicker(-0.95);
             } else if (gamepad1.b) {
                 intake.spinIntake(-0.95);
                 intake.spinTransfer(-0.95);

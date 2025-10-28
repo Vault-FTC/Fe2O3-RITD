@@ -109,11 +109,15 @@ public class driveallclass extends Subsystem {
 //    }
 
     public void driveToPosition(Location target, double turnVal, Telemetry telemetry) {
-        double p = 0.005;
+        double p = 0.006;
         double p_rotation = 0.03;
         double strafe = (target.Strafe - poseEstimator.getGlobalX());
         double forward = (-target.Forward + poseEstimator.getGlobalY());
         double heading = (target.TurnDegrees - Math.toDegrees(poseEstimator.getHeading()));
+
+        double strafeError = (target.Strafe - poseEstimator.getGlobalX());
+        double forwardError = (-target.Forward + poseEstimator.getGlobalY());
+        double headingError = (target.TurnDegrees - Math.toDegrees(poseEstimator.getHeading()));
 
 
         if (telemetry != null) {
@@ -122,21 +126,38 @@ public class driveallclass extends Subsystem {
             telemetry.addData("Target Heading", heading);
         }
 
+        double forwardPower = forward * p;
+        double strafePower = strafe * p;
+        double turnPower = heading * p_rotation;
+
+        double minPower = 0.25;
+        double maxPower = 1;
+
+        forwardPower = Math.max(Math.min(forwardPower, maxPower), -maxPower);
+        strafePower = Math.max(Math.min(strafePower, maxPower), -maxPower);
+
+        if (Math.abs(forwardPower) < minPower && Math.abs(forwardError) > 3) {
+            forwardPower = minPower * Math.signum(forwardError);
+        }
+        if (Math.abs(strafePower) < minPower && Math.abs(strafeError) > 3) {
+            strafePower = minPower * Math.signum(strafeError);
+        }
+
         double distance = Math.hypot(forward,strafe);
 
-        if (distance < 10) {
+        if (distance < 7) {
             drive(0,0,0);
             return;
         }
 
-        drive(forward * p, strafe * p, heading * p_rotation);
+        drive(forwardPower, strafePower, turnPower);
 
     }
 
     public boolean isAtPosition(Location target) {
         double currentX = poseEstimator.getGlobalX();
         double currentY = poseEstimator.getGlobalY();
-        double tolerance = 10;
+        double tolerance = 20;
         return Math.abs(currentX-target.Strafe) < tolerance && Math.abs(currentY - target.Forward) < tolerance;
     }
     public void update()

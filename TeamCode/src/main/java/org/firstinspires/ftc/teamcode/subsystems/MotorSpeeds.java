@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.subsystems;
 public enum MotorSpeeds {
     ZERO(0),
 //    THREE_EIGHTS(1000),
-    NEAR(800),
+    NEAR(850),
 //    FIVE_EIGHTS(1200),
 //    THREE_QUARTERS(1500),
-    FAR(1750),
+    FAR(1086),
 //    NINETY(5400),
 //    NINETY_FIVE(1400),
     FULL(2000);

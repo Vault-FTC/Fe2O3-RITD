@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.CommandSystem.Command;
 import org.firstinspires.ftc.teamcode.CommandSystem.CommandScheduler;
@@ -11,22 +10,25 @@ import org.firstinspires.ftc.teamcode.Commands.DriveToCommand;
 import org.firstinspires.ftc.teamcode.Commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.Commands.ShootCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.MotorSpeeds;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.driveallclass;
 
-@Autonomous
-public class CommandSchedulerTest extends LinearOpMode {
+@Autonomous(name = "Blue Far", group = "Blue Team")
+public class BaseFarAuto extends BaseNearAuto {
     driveallclass drive;
     Shooter shooter;
     Intake intake;
-    Location firstPosition = new Location(-130, 0, 0);
-    Location secondPosition = new Location(-130, 0, -43);
-    Location thirdPosition = new Location(-90, -90, 43);
-    Location fourthPosition = new Location(-130, 0, -43);
-    Location fifthPosition = new Location(-130, -100, 0);
+    Location farShootPosition = new Location(0, 0, 0);
+    Location firstPickupPosition = new Location(80, 0, 75);
+    Location firstPickupPosition2 = new Location(80,-100, 75);
+    Location parkPosition = new Location(88, 0, 0);
     CommandScheduler scheduler = CommandScheduler.getInstance();
     Command auto;
-    ParallelCommandGroup auto2;
+
+    void setTargets() {
+
+    }
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -34,21 +36,29 @@ public class CommandSchedulerTest extends LinearOpMode {
         shooter = new Shooter(hardwareMap);
         intake = new Intake(hardwareMap);
         scheduler.clearRegistry();
-        auto = SequentialCommandGroup.getBuilder()
-                .add(new DriveToCommand(drive, firstPosition))
-                .add(new ShootCommand(shooter, intake, 4))
+
+        setTargets();
+
+        SequentialCommandGroup auto = SequentialCommandGroup.getBuilder()
+                .add(new DriveToCommand(drive, farShootPosition, telemetry))
+                .add(new ShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.FAR))
+                .add(new DriveToCommand(drive, firstPickupPosition, telemetry))
+                .add(ParallelCommandGroup.getBuilder()
+                        .add(new IntakeCommand(intake, 3, telemetry))
+                        .add(new DriveToCommand(drive, firstPickupPosition2, telemetry))
+                        .build()
+                )
+                .add(new DriveToCommand(drive, farShootPosition, telemetry))
+                .add(new ShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.FAR))
+                .add(new DriveToCommand(drive, parkPosition, telemetry))
                 .build();
-//        auto2 = ParallelCommandGroup.getBuilder()
-//                .add(new IntakeCommand(intake, 5000))
-//                .add(new DriveToCommand(drive, thirdPosition))
-//                .build();
 
         waitForStart();
 
         auto.schedule();
-//      auto2.schedule();
         while(opModeIsActive()) {
             scheduler.run();
+            telemetry.update();
         }
     }
 }
