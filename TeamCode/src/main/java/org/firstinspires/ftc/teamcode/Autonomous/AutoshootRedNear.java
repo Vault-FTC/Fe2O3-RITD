@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+@Disabled
 @Autonomous(name = "AutoShoot red near", group = "Red Team")
 public class AutoshootRedNear extends autoshoot {
 

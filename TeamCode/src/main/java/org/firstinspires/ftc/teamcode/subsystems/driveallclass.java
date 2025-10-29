@@ -157,7 +157,7 @@ public class driveallclass extends Subsystem {
     public boolean isAtPosition(Location target) {
         double currentX = poseEstimator.getGlobalX();
         double currentY = poseEstimator.getGlobalY();
-        double tolerance = 20;
+        double tolerance = 15;
         return Math.abs(currentX-target.Strafe) < tolerance && Math.abs(currentY - target.Forward) < tolerance;
     }
     public void update()

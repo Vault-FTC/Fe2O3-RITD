@@ -18,14 +18,9 @@ import org.firstinspires.ftc.teamcode.subsystems.driveallclass;
 @TeleOp(name = "TeleOp Blue", group = "Concept")
 public class SimpleFieldCentricDrive extends LinearOpMode {
 
-    private DcMotorEx frmotor, flmotor, brmotor, blmotor;
     public LimeLight Limelight;
     Intake intake;
-    PoseEstimator poseEstimator;
-
     boolean last_y;
-
-    boolean last_dpad_up, last_dpad_down;
     boolean shooting;
 
     public void setTargets() {
@@ -80,16 +75,16 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
 
 
             if (gamepad1.right_bumper) {
-                rx = rx + Limelight.getTx() / 1.5;
-                LLResultTypes.FiducialResult judge = Limelight.getResult();
-                if (judge == null) {
+                rx = rx - Limelight.getTx() / 1.5;
+                LLResultTypes.FiducialResult result = Limelight.getResult();
+                if (result == null) {
 
                 } else {
-                    double range = Math.abs(judge.getCameraPoseTargetSpace().getPosition().z);
+                    double range = Math.abs(result.getCameraPoseTargetSpace().getPosition().z);
                     // launchpower = 0.4 + range / 4;
                     // was 0.3
                     telemetry.addData("fff", launchpower);
-                    if (judge.getCameraPoseTargetSpace().getPosition().x < 5) {
+                    if (result.getCameraPoseTargetSpace().getPosition().x < 5) {
                         launcher.execute(true, MotorSpeeds.NEAR);
                     }
                 }
