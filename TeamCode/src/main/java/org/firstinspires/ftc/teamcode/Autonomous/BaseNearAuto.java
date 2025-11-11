@@ -68,22 +68,22 @@ public class BaseNearAuto extends LinearOpMode {
                         .build()
                 )
 
-                .add(new DriveToCommand(drive, launchPosition, telemetry))
+//                .add(new DriveToCommand(drive, launchPosition, telemetry))
 //                .add(new LimeLightTurnCommand(drive,LimeLight,telemetry))
-                .add(new TimedShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.AUTO_NEAR))
-
-
-                .add(new DriveToCommand(drive, prepareCollectThirdRowArtifacts, telemetry))
-                .add(ParallelCommandGroup.getBuilder()
-                        .add(new IntakeCommand(intake, 3, telemetry))
-                        .add(new DriveToCommand(drive, collectionThirdRowArtifacts, telemetry))
-                        .build()
-                )
-
-                .add(new DriveToCommand(drive, launchPosition, telemetry))
-                .add(new TimedShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.AUTO_NEAR))
-
-                .add(new DriveToCommand(drive, leaveZonePosition, telemetry))
+//                .add(new TimedShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.AUTO_NEAR))
+//
+//
+//                .add(new DriveToCommand(drive, prepareCollectThirdRowArtifacts, telemetry))
+//                .add(ParallelCommandGroup.getBuilder()
+//                        .add(new IntakeCommand(intake, 3, telemetry))
+//                        .add(new DriveToCommand(drive, collectionThirdRowArtifacts, telemetry))
+//                        .build()
+//                )
+//
+//                .add(new DriveToCommand(drive, launchPosition, telemetry))
+//                .add(new TimedShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.AUTO_NEAR))
+//
+//                .add(new DriveToCommand(drive, leaveZonePosition, telemetry))
                 .build();
 
         waitForStart();
