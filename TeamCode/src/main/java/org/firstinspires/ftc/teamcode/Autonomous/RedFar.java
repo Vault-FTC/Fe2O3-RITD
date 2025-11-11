@@ -10,10 +10,11 @@ public class RedFar extends BaseFarAuto {
     @Override
     void setTargets() {
         LimeLight = new LimeLight(hardwareMap,24);
-        farShootPosition = new Location(0, 0, 0);
-        firstPickupPosition = new Location(80, 0, -75);
-        firstPickupPosition2 = new Location(80, 100, -75);
-        parkPosition = new Location(88, 0, 0);
+        doNotHitWall = new Location(30, 0, -20);
+        farShootPosition = new Location(30, 0, -20);
+        firstPickupPosition = new Location(80, 0, -95);
+        firstPickupPosition2 = new Location(70, 130, -95);
+        parkPosition = new Location(88, 0, -95);
 
     }
 }

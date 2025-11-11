@@ -9,11 +9,12 @@ public class RedNearAuto extends BaseNearAuto {
 
     @Override
     void setTargets()
-    { LimeLight = new LimeLight(hardwareMap,24);
-        nearShootPosition = new Location(-110, 0, 0);
-        firstPickupPosition = new Location(-70, 90, -43);
-        parkPosition = new Location(-130, 100, 0);
-        secondPickupPosition = new Location(-140,100, -43);
-        secondPickupPosition2 = new Location(-90, 130, -43);
+    {
+        LimeLight = new LimeLight(hardwareMap,24);
+        launchPosition = new Location(-110, 0, 0);
+        openGatePositions = new Location(-70, 90, -43);
+        collectSecondRowArtifacts = new Location(-130, 100, 0);
+        collectionThirdRowArtifacts = new Location(-140,100, -43);
+        leaveZonePosition = new Location(-90, 130, -43);
     }
 }

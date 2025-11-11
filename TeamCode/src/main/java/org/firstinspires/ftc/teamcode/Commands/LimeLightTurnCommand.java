@@ -32,13 +32,13 @@ public class LimeLightTurnCommand extends Command
             moved.drive(0,0, 0);
             return;
         }
-        Pose3D solo_fida = res.getRobotPoseTargetSpace();
+        Pose3D solo_fida = res.getRobotPoseTargetSpace(); // Why Josiah
         double p = 0.05;
         double x = (0 + solo_fida.getPosition().x) * p; // correct = 0;
         double z = (-1.8 + solo_fida.getPosition().z) * p;  // correct = -1.8;
         double yaw = solo_fida.getOrientation().getYaw(AngleUnit.DEGREES);
         moved.drive(0,0, yaw / 9);
-        tele.addData("way", yaw);
+        tele.addData("yaw", yaw);
     }
 
     @Override

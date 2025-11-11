@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.CommandSystem.Subsystem;
 
 public class Shooter extends Subsystem {
     boolean spinKicker = true;
-    MotorSpeeds currentSpeed;
+    MotorSpeeds currentSpeed = MotorSpeeds.NEAR;
     private DcMotorEx kicker;
     private DcMotorEx shooter;
     public Shooter(HardwareMap hardwareMap) {
@@ -33,15 +33,15 @@ public class Shooter extends Subsystem {
 //
 //    }
 
-    public void setShooterSpeed(MotorSpeeds speed){
-        currentSpeed = speed;
-        shooter.setVelocity(-currentSpeed.speed, AngleUnit.DEGREES);
-    }
+//    public void setShooterSpeed(MotorSpeeds speed){
+//        currentSpeed = speed;
+//        shooter.setVelocity(-currentSpeed.speed, AngleUnit.DEGREES);
+//    }
 
 
     public void execute(boolean shoot, MotorSpeeds motorSpeed) {
         if (shoot) {
-            setShooterSpeed(motorSpeed);
+            setShooterSpeed(motorSpeed.speed);
             if (Math.abs(shooter.getVelocity(AngleUnit.DEGREES) - currentSpeed.speed) < 100) {
                 toggleKicker(0.5);
             }
@@ -52,6 +52,32 @@ public class Shooter extends Subsystem {
             shooter.setVelocity(0);
             kicker.setPower(0);
         }
+    }
+
+    public double distanceToSpeed(double distanceCm)
+    {
+        return  ((distanceCm * 100.0 / 2.54) - 40) * 5 + 700;
+        //return (585 * Math.pow(1.0046834253, (distanceCm / 2.54)));
+    }
+
+    public void execute(boolean shoot, double motorSpeed) {
+        if (shoot) {
+            setShooterSpeed(motorSpeed);
+            if (Math.abs(shooter.getVelocity(AngleUnit.DEGREES) - motorSpeed) < 100) {
+                toggleKicker(0.5);
+            }
+            else {
+                toggleKicker(0);
+            }
+        } else {
+            shooter.setVelocity(0);
+            kicker.setPower(0);
+        }
+    }
+
+    public void setShooterSpeed(double speed){
+        //currentSpeed = speed;
+        shooter.setVelocity(-speed, AngleUnit.DEGREES);
     }
 
     public void setShooterSpeedFromAprilTag() {

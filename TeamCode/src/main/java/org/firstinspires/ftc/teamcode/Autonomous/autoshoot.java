@@ -77,7 +77,7 @@ public class autoshoot extends LinearOpMode {
                 driveallclass.driveToPosition(firstPosition, 0, telemetry);
             } else if (time < 6) {//the 6 was 12
                 driveallclass.drive(0, 0, 0);
-                shooter.setShooterSpeed(launchSpeed);
+                shooter.setShooterSpeed(launchSpeed.speed);
             } else if (time < 14) {//the 7 was 14
                 intake.spinTransfer(1);
                 intake.spinIntake(1);
@@ -87,7 +87,7 @@ public class autoshoot extends LinearOpMode {
                 intake.spinTransfer(0);
                 intake.spinIntake(0);
                 intake.spinKicker(0);
-                shooter.setShooterSpeed(MotorSpeeds.ZERO);
+                shooter.setShooterSpeed(MotorSpeeds.ZERO.speed);
             } else if (time < 18) {//the 10 was 20
                 driveallclass.driveToPosition(secondPosition, 0, telemetry);
             } else if (time < 20) {

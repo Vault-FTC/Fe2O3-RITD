@@ -17,6 +17,8 @@ public class driveallclass extends Subsystem {
     IntSupplier rightOdo, leftOdo, backOdo;
     PoseEstimator poseEstimator;
 
+    double launchpower;
+
     public driveallclass(HardwareMap hardwareMap) {
         frmotor = hardwareMap.get(DcMotorEx.class, "rf");
         flmotor = hardwareMap.get(DcMotorEx.class, "lf");
@@ -113,7 +115,7 @@ public class driveallclass extends Subsystem {
         double p_rotation = 0.03;
         double strafe = (target.Strafe - poseEstimator.getGlobalX());
         double forward = (-target.Forward + poseEstimator.getGlobalY());
-        double heading = (target.TurnDegrees - Math.toDegrees(poseEstimator.getHeading()));
+            double heading = (target.TurnDegrees - Math.toDegrees(poseEstimator.getHeading()));
 
         double strafeError = (target.Strafe - poseEstimator.getGlobalX());
         double forwardError = (-target.Forward + poseEstimator.getGlobalY());
@@ -121,9 +123,10 @@ public class driveallclass extends Subsystem {
 
 
         if (telemetry != null) {
-            telemetry.addData("Target Strafe", strafe);
-            telemetry.addData("Target Forward", forward);
-            telemetry.addData("Target Heading", heading);
+            telemetry.addData("Target", "X: " + target.Strafe + "  Y: " + target.Forward);
+//            telemetry.addData("Target Strafe", strafe);
+//            telemetry.addData("Target Forward", forward);
+//            telemetry.addData("Target Heading", heading);
         }
 
         double forwardPower = forward * p;
@@ -157,8 +160,12 @@ public class driveallclass extends Subsystem {
     public boolean isAtPosition(Location target) {
         double currentX = poseEstimator.getGlobalX();
         double currentY = poseEstimator.getGlobalY();
+        double currentHeading = poseEstimator.getHeading();
         double tolerance = 15;
-        return Math.abs(currentX-target.Strafe) < tolerance && Math.abs(currentY - target.Forward) < tolerance;
+        double turnTolerance = 17.5;
+        return Math.abs(currentX - target.Strafe) < tolerance &&
+                Math.abs(currentY - target.Forward) < tolerance &&
+                Math.abs(Math.toDegrees(currentHeading)-target.TurnDegrees) < turnTolerance;
     }
     public void update()
     {

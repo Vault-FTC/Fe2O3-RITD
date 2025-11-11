@@ -6,20 +6,20 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.MotorSpeeds;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
-public class ShootCommand extends Command {
+public class TimedShootCommand extends Command {
     Telemetry telemetry;
     Shooter shooter;
     Intake intake;
     MotorSpeeds motorSpeed;
-    boolean shoot;
+    private final double durationMs;
     private double startTime;
 
-    public ShootCommand(Shooter shooter, Intake intake, boolean shoot, Telemetry telemetry, MotorSpeeds motorSpeed) {
+    public TimedShootCommand(Shooter shooter, Intake intake, double durationSeconds, Telemetry telemetry, MotorSpeeds motorSpeed) {
         this.shooter = shooter;
         this.intake = intake;
         this.telemetry = telemetry;
         this.motorSpeed = motorSpeed;
-        this.shoot = shoot;
+        this.durationMs = durationSeconds * 1000;
         addRequirements(this.shooter);
     }
 
@@ -46,7 +46,7 @@ public class ShootCommand extends Command {
     }
 
     public boolean isFinished() {
-        return shoot;
+        return timer.milliseconds() - startTime >= durationMs;
     }
 
     @Override
@@ -56,4 +56,5 @@ public class ShootCommand extends Command {
         intake.spinTransfer(0);
         intake.spinKicker(0);
     }
+
 }
