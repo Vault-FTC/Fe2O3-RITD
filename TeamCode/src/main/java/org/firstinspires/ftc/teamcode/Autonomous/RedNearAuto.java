@@ -12,7 +12,7 @@ public class RedNearAuto extends BaseNearAuto {
     {
         LimeLight = new LimeLight(hardwareMap,24);
         launchPosition = new Location(-110, 0, 0);
-        openGatePositions = new Location(-70, 90, -43);
+//        openGatePositions = new Location(-70, 90, -43);
         collectSecondRowArtifacts = new Location(-130, 100, 0);
         collectionThirdRowArtifacts = new Location(-140,100, -43);
         leaveZonePosition = new Location(-90, 130, -43);

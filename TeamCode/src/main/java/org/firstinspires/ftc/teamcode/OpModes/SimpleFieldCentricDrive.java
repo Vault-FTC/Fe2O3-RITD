@@ -25,7 +25,7 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
     boolean last_down;
     boolean shooting;
 
-    double launchpower = (100);
+    double launchpower = (850);
 
     public void setTargets() {
         Limelight = new LimeLight(hardwareMap, 20);
@@ -69,13 +69,13 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
                 intake.spinIntake(-0.95);
                 intake.spinKicker(-0.75);
             } else {
-                intake.spinKicker(0);
-                intake.spinIntake(0);
+                intake.spinKicker(-0.2);
+                intake.spinIntake(0.2);
             }
 
 
             if (gamepad1.right_bumper) {
-                //joystick_rx = joystick_rx - Limelight.getTx() / 1.5;
+                joystick_rx = joystick_rx - Limelight.getTx() / 1.5;
                 LLResultTypes.FiducialResult result = Limelight.getResult();
                 if (result == null) {
 
@@ -83,10 +83,14 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
                     double range = Math.abs(result.getCameraPoseTargetSpace().getPosition().z);
                     // launchpower = 0.4 + range / 4;
                     // was 0.3
-                    this.launchpower = launcher.distanceToSpeed(range);
+//                    this.launchpower = launcher.distanceToSpeed(range);
                     telemetry.addData("fff", range);
                     if (result.getCameraPoseTargetSpace().getPosition().x < 67) {
                         launcher.execute(true, this.launchpower);
+                        if (launcher.getShooterVelocity() >= this.launchpower) {
+                            intake.spinKicker(0.5);
+                            intake.spinIntake(0.5);
+                        }
                     }
                 }
             } else {
