@@ -38,7 +38,7 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
 
         Shooter launcher = new Shooter(hardwareMap);
 
-        MotorSpeeds launchpower = MotorSpeeds.NEAR;
+        MotorSpeeds launchpower = MotorSpeeds.ZERO;
 
         setTargets();
 

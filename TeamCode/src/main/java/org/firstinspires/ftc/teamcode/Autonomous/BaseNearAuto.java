@@ -38,29 +38,31 @@ public class BaseNearAuto extends LinearOpMode {
 
     }
 
-    @Override
-    public void runOpMode() throws InterruptedException {
-        drive = new driveallclass(hardwareMap);
-        shooter = new Shooter(hardwareMap);
-        intake = new Intake(hardwareMap);
-        LimeLight = new LimeLight(hardwareMap,20);
-        scheduler.clearRegistry();
 
-        setTargets();
-
-        SequentialCommandGroup auto = SequentialCommandGroup.getBuilder()
+    public Command driveFrontStartToFirstLaunch()
+    {
+        return SequentialCommandGroup.getBuilder()
                 .add(new DriveToCommand(drive, launchPosition, telemetry))
 //                .add(new LimeLightTurnCommand(drive,LimeLight, telemetry))
                 .add(new TimedShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.AUTO_NEAR))
+                .build();
+    }
+
+    public Command driveToFirstRowAndLaunch() {
+        return SequentialCommandGroup.getBuilder()
                 .add(ParallelCommandGroup.getBuilder()
                         .add(new IntakeCommand(intake, 3, telemetry))
                         .add(new DriveToCommand(drive, collectFirstRowArtifacts, telemetry))
                         .build()
                 )
-                //.add(new DriveToCommand(drive, openGatePositions, telemetry))
                 .add(new DriveToCommand(drive, launchPosition, telemetry))
 //                .add(new LimeLightTurnCommand(drive,LimeLight,telemetry))
                 .add(new TimedShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.AUTO_NEAR))
+                .build();
+    }
+
+    public Command driveToSecondRowAndLaunch() {
+        return SequentialCommandGroup.getBuilder()
                 .add(new DriveToCommand(drive, prepareSecondRowArtifacts, telemetry))
                 .add(ParallelCommandGroup.getBuilder()
                         .add(new IntakeCommand(intake, 3, telemetry))
@@ -71,9 +73,12 @@ public class BaseNearAuto extends LinearOpMode {
                 .add(new DriveToCommand(drive, launchPosition, telemetry))
 //                .add(new LimeLightTurnCommand(drive,LimeLight,telemetry))
                 .add(new TimedShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.AUTO_NEAR))
+                .build();
+    }
 
-
-                .add(new DriveToCommand(drive, prepareCollectThirdRowArtifacts, telemetry))
+    public Command driveToThirdRowAndLaunch() {
+        return SequentialCommandGroup.getBuilder()
+                        .add(new DriveToCommand(drive, prepareCollectThirdRowArtifacts, telemetry))
                 .add(ParallelCommandGroup.getBuilder()
                         .add(new IntakeCommand(intake, 3, telemetry))
                         .add(new DriveToCommand(drive, collectionThirdRowArtifacts, telemetry))
@@ -83,12 +88,34 @@ public class BaseNearAuto extends LinearOpMode {
                 .add(new DriveToCommand(drive, launchPosition, telemetry))
                 .add(new TimedShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.AUTO_NEAR))
 
-                .add(new DriveToCommand(drive, leaveZonePosition, telemetry))
-                .build();
+                .add(new DriveToCommand(drive, leaveZonePosition, telemetry)).build();
+    }
+
+    public void scheduleCommands()
+    {
+        SequentialCommandGroup auto = SequentialCommandGroup.getBuilder()
+                .add(driveFrontStartToFirstLaunch())
+                //.add(new DriveToCommand(drive, openGatePositions, telemetry))
+                .add(driveToFirstRowAndLaunch())
+                .add(driveToSecondRowAndLaunch())
+                .add(driveToThirdRowAndLaunch())
+                .build();auto.schedule();
+    }
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+        drive = new driveallclass(hardwareMap);
+        shooter = new Shooter(hardwareMap);
+        intake = new Intake(hardwareMap);
+        LimeLight = new LimeLight(hardwareMap,20);
+        scheduler.clearRegistry();
+
+        setTargets();
 
         waitForStart();
+        scheduleCommands();
 
-        auto.schedule();
+
         while(opModeIsActive()) {
             scheduler.run();
             telemetry.addData("Position", drive.getPosition());
