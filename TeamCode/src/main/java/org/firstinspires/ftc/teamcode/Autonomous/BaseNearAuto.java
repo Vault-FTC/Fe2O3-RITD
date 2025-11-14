@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.CommandSystem.ParallelCommandGroup;
 import org.firstinspires.ftc.teamcode.CommandSystem.SequentialCommandGroup;
 import org.firstinspires.ftc.teamcode.Commands.DriveToCommand;
 import org.firstinspires.ftc.teamcode.Commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.Commands.LimeLightTurnCommand;
 import org.firstinspires.ftc.teamcode.Commands.TimedShootCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
@@ -23,11 +24,11 @@ public class BaseNearAuto extends LinearOpMode {
     Intake intake;
     LimeLight LimeLight;
     Location launchPosition = new Location(-110, 0, 0);
-    Location collectFirstRowArtifacts = new Location(-65, -90, 43);
-    Location prepareSecondRowArtifacts = new Location(-190,-10, 43);
-    Location collectSecondRowArtifacts = new Location(-83, -134, 42);
-    Location prepareCollectThirdRowArtifacts = new Location(-198,-121, 37);
-    Location collectionThirdRowArtifacts = new Location(-124,-182, 41);
+    Location collectFirstRowArtifacts = new Location(-70, -95, 43);
+    Location prepareSecondRowArtifacts = new Location(-152,-80, 43);
+    Location collectSecondRowArtifacts = new Location(-86, -140, 43);
+    Location prepareCollectThirdRowArtifacts = new Location(-192,-124, 43);
+    Location collectionThirdRowArtifacts = new Location(-129,-184, 43);
     Location leaveZonePosition = new Location(-80, -140, 43);
 
     CommandScheduler scheduler = CommandScheduler.getInstance();
@@ -49,6 +50,7 @@ public class BaseNearAuto extends LinearOpMode {
 
         SequentialCommandGroup auto = SequentialCommandGroup.getBuilder()
                 .add(new DriveToCommand(drive, launchPosition, telemetry))
+                .add(new LimeLightTurnCommand(drive, LimeLight, telemetry))
                 .add(new TimedShootCommand(shooter, intake, 3, telemetry, MotorSpeeds.AUTO_NEAR))
                 .add(ParallelCommandGroup.getBuilder()
                         .add(new IntakeCommand(intake, 2, telemetry))
@@ -57,30 +59,29 @@ public class BaseNearAuto extends LinearOpMode {
                 )
                 .add(new DriveToCommand(drive, launchPosition, telemetry))
 //                .add(new LimeLightTurnCommand(drive,LimeLight,telemetry))
-                .add(new TimedShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.AUTO_NEAR))
-//                .add(new DriveToCommand(drive, prepareSecondRowArtifacts, telemetry))
-//                .add(ParallelCommandGroup.getBuilder()
-//                        .add(new IntakeCommand(intake, 3, telemetry))
-//                        .add(new DriveToCommand(drive, collectSecondRowArtifacts, telemetry))
-//                        .build()
-//                )
-
-//                .add(new DriveToCommand(drive, launchPosition, telemetry))
+                .add(new TimedShootCommand(shooter, intake, 3, telemetry, MotorSpeeds.AUTO_NEAR))
+                .add(new DriveToCommand(drive, prepareSecondRowArtifacts, telemetry))
+                .add(ParallelCommandGroup.getBuilder()
+                        .add(new IntakeCommand(intake, 2, telemetry))
+                        .add(new DriveToCommand(drive, collectSecondRowArtifacts, telemetry))
+                        .build()
+                )
+                .add(new DriveToCommand(drive, prepareSecondRowArtifacts, telemetry))
+                .add(new DriveToCommand(drive, launchPosition, telemetry))
 //                .add(new LimeLightTurnCommand(drive,LimeLight,telemetry))
-//                .add(new TimedShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.AUTO_NEAR))
-//
-//
-//                .add(new DriveToCommand(drive, prepareCollectThirdRowArtifacts, telemetry))
-//                .add(ParallelCommandGroup.getBuilder()
-//                        .add(new IntakeCommand(intake, 3, telemetry))
-//                        .add(new DriveToCommand(drive, collectionThirdRowArtifacts, telemetry))
-//                        .build()
-//                )
-//
-//                .add(new DriveToCommand(drive, launchPosition, telemetry))
-//                .add(new TimedShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.AUTO_NEAR))
-//
-//                .add(new DriveToCommand(drive, leaveZonePosition, telemetry))
+                .add(new TimedShootCommand(shooter, intake, 3, telemetry, MotorSpeeds.AUTO_NEAR))
+
+                .add(new DriveToCommand(drive, prepareCollectThirdRowArtifacts, telemetry))
+                .add(ParallelCommandGroup.getBuilder()
+                        .add(new IntakeCommand(intake, 2, telemetry))
+                        .add(new DriveToCommand(drive, collectionThirdRowArtifacts, telemetry))
+                        .build()
+                )
+
+                .add(new DriveToCommand(drive, launchPosition, telemetry))
+                .add(new TimedShootCommand(shooter, intake, 2, telemetry, MotorSpeeds.AUTO_NEAR))
+
+                .add(new DriveToCommand(drive, leaveZonePosition, telemetry))
                 .build();
 
         waitForStart();

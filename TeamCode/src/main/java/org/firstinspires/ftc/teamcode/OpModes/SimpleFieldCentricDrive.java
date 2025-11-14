@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.driveallclass;
 
 
-@TeleOp(name = "TeleOp Blue", group = "Concept")
+@TeleOp(name = "TeleOp Blue", group = "Teleop")
 public class SimpleFieldCentricDrive extends LinearOpMode {
 
     public LimeLight Limelight;
@@ -69,8 +69,8 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
                 intake.spinIntake(-0.95);
                 intake.spinKicker(-0.75);
             } else {
-                intake.spinKicker(-0.2);
-                intake.spinIntake(0.2);
+                intake.spinKicker(0);
+                intake.spinIntake(0);
             }
 
 
@@ -86,11 +86,13 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
 //                    this.launchpower = launcher.distanceToSpeed(range);
                     telemetry.addData("fff", range);
                     if (result.getCameraPoseTargetSpace().getPosition().x < 67) {
-                        launcher.execute(true, this.launchpower);
-                        if (launcher.getShooterVelocity() >= this.launchpower) {
-                            intake.spinKicker(0.5);
-                            intake.spinIntake(0.5);
+                        if (result.getCameraPoseTargetSpace().getPosition().z <= -2.5) {
+                            this.launchpower = 1000;
                         }
+                        else {
+                            this.launchpower = 850;
+                        }
+                        launcher.execute(true, this.launchpower);
                     }
                 }
             } else {
@@ -106,7 +108,7 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
                     launcher.toggleKicker(0);
                 }
             }
-
+// A bunch of comments are underneath this but I was tired of seeing them.
 //            if (!last_dpad_up && gamepad1.dpad_up) {
 //                int newVal = launchpower.ordinal() + 1;
 //                if (newVal >= MotorSpeeds.values().length)
@@ -150,14 +152,12 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
 
             last_down = gamepad1.dpad_down;
             last_up = gamepad1.dpad_up;
-//            telemetry.addData("OdoBack", backOdo.getAsInt());
-//            telemetry.addData("OdoLeft", leftOdo.getAsInt());
-//            telemetry.addData("OdoRight", rightOdo.getAsInt());
             telemetry.addData("shootSpeed", launcher.getShooterVelocity());
-            // telemetry.addData("heading", Math.toDegrees(poseEstimator.getHeading()) % 360);
-            //telemetry.addData("Shooting", shooting);
             telemetry.addData("LaunchPower", this.launchpower);
             telemetry.addData("Position", drive.getPosition());
+            if (Limelight.getResult() != null) {
+                telemetry.addData("Distance from AprilTag", Limelight.getResult().getCameraPoseTargetSpace().getPosition().z);
+            }
             telemetry.update();
             drive.updateValues(telemetry);
         }
