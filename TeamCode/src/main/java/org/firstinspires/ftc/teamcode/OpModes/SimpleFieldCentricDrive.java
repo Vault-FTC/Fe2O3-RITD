@@ -79,7 +79,7 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
 
 
             if (gamepad1.right_bumper) {
-                //joystick_rx = joystick_rx - Limelight.getTx() / 1.5;
+                joystick_rx = joystick_rx - Limelight.getTx() / 1.5;
                 LLResultTypes.FiducialResult result = Limelight.getResult();
                 if (result == null) {
 
@@ -87,7 +87,7 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
                     double range = Math.abs(result.getCameraPoseTargetSpace().getPosition().z);
                     // launchpower = 0.4 + range / 4;
                     // was 0.3
-                    this.launchpower = launcher.distanceToSpeed(range);
+                    this.launchpower = 850; //launcher.distanceToSpeed(range);
                     telemetry.addData("fff", range);
                     if (result.getCameraPoseTargetSpace().getPosition().x < 67) {
                         launcher.execute(true, this.launchpower);
