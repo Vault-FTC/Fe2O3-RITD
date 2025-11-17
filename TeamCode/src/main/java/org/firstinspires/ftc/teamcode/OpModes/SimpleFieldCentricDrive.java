@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Light;
 
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Lights;
 import org.firstinspires.ftc.teamcode.subsystems.MotorSpeeds;
 import org.firstinspires.ftc.teamcode.Autonomous.Location;
 import org.firstinspires.ftc.teamcode.geometry.PoseEstimator;
@@ -24,6 +27,10 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
     boolean last_up;
     boolean last_down;
     boolean shooting;
+    RevBlinkinLedDriver.BlinkinPattern green;
+    RevBlinkinLedDriver.BlinkinPattern red;
+
+    Lights light;
 
     double launchpower = (850);
 
@@ -35,12 +42,11 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
     public void runOpMode() {
         intake = new Intake(hardwareMap);
         driveallclass drive = new driveallclass(hardwareMap);
-
         Shooter launcher = new Shooter(hardwareMap);
-
         MotorSpeeds launchpower = MotorSpeeds.NEAR;
-
         setTargets();
+        green = RevBlinkinLedDriver.BlinkinPattern.GREEN;
+        red = RevBlinkinLedDriver.BlinkinPattern.RED;
 
         waitForStart();
         // poseEstimator.update();
@@ -86,6 +92,7 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
 //                    this.launchpower = launcher.distanceToSpeed(range);
                     telemetry.addData("fff", range);
                     if (result.getCameraPoseTargetSpace().getPosition().x < 67) {
+                        light.setColor(green);
                         if (result.getCameraPoseTargetSpace().getPosition().z <= -2.5) {
                             this.launchpower = 1000;
                         }
@@ -93,6 +100,8 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
                             this.launchpower = 850;
                         }
                         launcher.execute(true, this.launchpower);
+                    } else {
+                        light.setColor(red);
                     }
                 }
             } else {
