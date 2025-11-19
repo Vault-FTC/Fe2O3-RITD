@@ -33,8 +33,8 @@ public class TimedShootCommand extends Command {
     public void execute() {
         double elapsed = timer.milliseconds() - startTime;
         if (elapsed > 2000) {
-            intake.spinIntake(0.75);
-            intake.spinKicker(0.75);
+            intake.spinIntake(0.95);
+            intake.spinKicker(0.95);
         } else {
             intake.spinIntake(0);
             intake.spinKicker(0);

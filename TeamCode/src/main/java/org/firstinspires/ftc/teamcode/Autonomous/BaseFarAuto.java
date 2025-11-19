@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.CommandSystem.ParallelCommandGroup;
 import org.firstinspires.ftc.teamcode.CommandSystem.SequentialCommandGroup;
 import org.firstinspires.ftc.teamcode.Commands.DriveToCommand;
 import org.firstinspires.ftc.teamcode.Commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.Commands.LimeLightTurnCommand;
 import org.firstinspires.ftc.teamcode.Commands.TimedShootCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
@@ -25,6 +26,7 @@ public class BaseFarAuto extends BaseNearAuto {
     CommandScheduler scheduler = CommandScheduler.getInstance();
     Command auto;
 
+
     void setTargets() {
 
     }
@@ -35,13 +37,13 @@ public class BaseFarAuto extends BaseNearAuto {
         shooter = new Shooter(hardwareMap);
         intake = new Intake(hardwareMap);
         scheduler.clearRegistry();
-        LimeLight = new LimeLight(hardwareMap,24);
+        LimeLight = new LimeLight(hardwareMap,20);
         setTargets();
 
         SequentialCommandGroup auto = SequentialCommandGroup.getBuilder()
                 .add(new DriveToCommand(drive, doNotHitWall, telemetry))
                 .add(new DriveToCommand(drive, farShootPosition, telemetry))
-//                .add(new LimeLightTurnCommand(drive,LimeLight, telemetry))
+                .add(new LimeLightTurnCommand(drive,LimeLight, telemetry))
                 .add(new TimedShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.FAR))
                 .add(new DriveToCommand(drive, firstPickupPosition, telemetry))
                 .add(ParallelCommandGroup.getBuilder()
@@ -50,7 +52,7 @@ public class BaseFarAuto extends BaseNearAuto {
                         .build()
                 )
                 .add(new DriveToCommand(drive, farShootPosition, telemetry))
-//                .add(new LimeLightTurnCommand(drive,LimeLight, telemetry))
+                .add(new LimeLightTurnCommand(drive,LimeLight, telemetry))
                 .add(new TimedShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.FAR))
                 .add(new DriveToCommand(drive, parkPosition, telemetry))
                 .build();
@@ -60,6 +62,7 @@ public class BaseFarAuto extends BaseNearAuto {
         auto.schedule();
         while(opModeIsActive()) {
             scheduler.run();
+            telemetry.addData("Position", drive.getPosition());
             telemetry.update();
         }
     }

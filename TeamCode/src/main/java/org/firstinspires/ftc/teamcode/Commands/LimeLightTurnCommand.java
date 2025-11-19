@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.subsystems.driveallclass;
 
 public class LimeLightTurnCommand extends Command
 {
+
     driveallclass moved;
     LimeLight light;
     Telemetry tele;
@@ -27,6 +28,7 @@ public class LimeLightTurnCommand extends Command
     @Override
     public void execute() {
         LLResultTypes.FiducialResult res = light.getResult();
+        tele.addData("Running", "limelight Command");
         if(res == null)
         {
             moved.drive(0,0, 0);
@@ -37,7 +39,7 @@ public class LimeLightTurnCommand extends Command
         double x = (0 + pose.getPosition().x) * p; // correct = 0;
         double z = (-1.8 + pose.getPosition().z) * p;  // correct = -1.8;
         double yaw = light.getTx();
-        moved.drive(0,0, yaw / 9);
+        moved.drive(0,0, yaw * -1);
         tele.addData("yaw", yaw);
     }
 
@@ -48,7 +50,7 @@ public class LimeLightTurnCommand extends Command
 
     @Override
     public boolean isFinished(){
-       return tenseistime.seconds() > 200;
+       return tenseistime.seconds() > 1.5;
 
     }
 }

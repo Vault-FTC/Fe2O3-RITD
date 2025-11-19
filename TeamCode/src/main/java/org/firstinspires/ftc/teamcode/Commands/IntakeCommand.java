@@ -31,7 +31,7 @@ public class IntakeCommand extends Command {
 
     @Override
     public void execute() {
-        intake.spinIntake(0.75);
+        intake.spinIntake(0.95);
         intake.spinKicker(-0.75);
         telemetry.addData("Running", "Intake Command");
     }
