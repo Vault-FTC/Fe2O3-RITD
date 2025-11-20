@@ -49,7 +49,7 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
         setTargets();
         green = RevBlinkinLedDriver.BlinkinPattern.GREEN;
         red = RevBlinkinLedDriver.BlinkinPattern.RED;
-        idle = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_LAVA_PALETTE;
+        idle = RevBlinkinLedDriver.BlinkinPattern.BEATS_PER_MINUTE_FOREST_PALETTE;
 
         waitForStart();
         // poseEstimator.update();
@@ -97,7 +97,7 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
                     if (result.getCameraPoseTargetSpace().getPosition().x < 67) {
                         light.setColor(green);
                         if (result.getCameraPoseTargetSpace().getPosition().z <= -2.5) {
-                            this.launchpower = 1150;
+                            this.launchpower = 1050;
                         }
                         else {
                             this.launchpower = 850;
@@ -109,7 +109,7 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
                     }
                 }
             } else {
-                light.setColor(red);
+                light.setColor(idle);
                 if (shooting) {
                     launcher.setShooterSpeed(this.launchpower);
                 } else {

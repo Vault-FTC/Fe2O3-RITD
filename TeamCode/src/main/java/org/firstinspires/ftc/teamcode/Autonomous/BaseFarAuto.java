@@ -22,6 +22,8 @@ public class BaseFarAuto extends BaseNearAuto {
     Location farShootPosition = new Location(30, 0, 40);
     Location firstPickupPosition = new Location(80, 0, 95);
     Location firstPickupPosition2 = new Location(70,-130, 95);
+    Location secondPickupPosition = new Location(160, 0, 95);
+    Location secondPickupPosition2 = new Location(150,-130, 95);
     Location parkPosition = new Location(88, -10, 95);
     CommandScheduler scheduler = CommandScheduler.getInstance();
     Command auto;
@@ -44,16 +46,25 @@ public class BaseFarAuto extends BaseNearAuto {
                 .add(new DriveToCommand(drive, doNotHitWall, telemetry))
                 .add(new DriveToCommand(drive, farShootPosition, telemetry))
                 .add(new LimeLightTurnCommand(drive,LimeLight, telemetry))
-                .add(new TimedShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.FAR))
+                .add(new TimedShootCommand(shooter, intake, 4, 2, telemetry, MotorSpeeds.FAR))
                 .add(new DriveToCommand(drive, firstPickupPosition, telemetry))
                 .add(ParallelCommandGroup.getBuilder()
-                        .add(new IntakeCommand(intake, 3, telemetry))
+                        .add(new IntakeCommand(intake, 2, telemetry))
                         .add(new DriveToCommand(drive, firstPickupPosition2, telemetry))
                         .build()
                 )
                 .add(new DriveToCommand(drive, farShootPosition, telemetry))
                 .add(new LimeLightTurnCommand(drive,LimeLight, telemetry))
-                .add(new TimedShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.FAR))
+                .add(new TimedShootCommand(shooter, intake, 4, 2, telemetry, MotorSpeeds.FAR))
+                .add(new DriveToCommand(drive, secondPickupPosition, telemetry))
+                .add(ParallelCommandGroup.getBuilder()
+                        .add(new IntakeCommand(intake, 2, telemetry))
+                        .add(new DriveToCommand(drive, secondPickupPosition2, telemetry))
+                        .build()
+                )
+                .add(new DriveToCommand(drive, farShootPosition, telemetry))
+                .add(new LimeLightTurnCommand(drive,LimeLight, telemetry))
+                .add(new TimedShootCommand(shooter, intake, 4, 2, telemetry, MotorSpeeds.FAR))
                 .add(new DriveToCommand(drive, parkPosition, telemetry))
                 .build();
 

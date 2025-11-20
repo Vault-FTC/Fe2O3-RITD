@@ -12,11 +12,13 @@ public class TimedShootCommand extends Command {
     Intake intake;
     MotorSpeeds motorSpeed;
     private final double durationMs;
+    private double spinUpTime;
     private double startTime;
 
-    public TimedShootCommand(Shooter shooter, Intake intake, double durationSeconds, Telemetry telemetry, MotorSpeeds motorSpeed) {
+    public TimedShootCommand(Shooter shooter, Intake intake, double durationSeconds, double spinUpTime, Telemetry telemetry, MotorSpeeds motorSpeed) {
         this.shooter = shooter;
         this.intake = intake;
+        this.spinUpTime = spinUpTime * 1000;
         this.telemetry = telemetry;
         this.motorSpeed = motorSpeed;
         this.durationMs = durationSeconds * 1000;
@@ -32,7 +34,7 @@ public class TimedShootCommand extends Command {
     @Override
     public void execute() {
         double elapsed = timer.milliseconds() - startTime;
-        if (elapsed > 2000) {
+        if (elapsed > spinUpTime) {
             intake.spinIntake(0.95);
             intake.spinKicker(0.95);
         } else {

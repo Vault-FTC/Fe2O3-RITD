@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
+import androidx.core.math.MathUtils;
+
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -35,11 +37,11 @@ public class LimeLightTurnCommand extends Command
             return;
         }
         Pose3D pose = res.getRobotPoseTargetSpace();
-        double p = 0.05;
+        double p = 0.01;
         double x = (0 + pose.getPosition().x) * p; // correct = 0;
-        double z = (-1.8 + pose.getPosition().z) * p;  // correct = -1.8;
-        double yaw = light.getTx();
-        moved.drive(0,0, yaw * -1);
+        double z = (-1.8 + pose.getPosition().z) * p;  // corect = -1.8;
+        double yaw = MathUtils.clamp(light.getTx() * -1, -0.3, 0.3);
+        moved.drive(0,0, yaw);
         tele.addData("yaw", yaw);
     }
 
