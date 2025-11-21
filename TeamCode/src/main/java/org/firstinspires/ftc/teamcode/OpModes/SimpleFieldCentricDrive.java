@@ -122,39 +122,6 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
                     launcher.toggleKicker(0);
                 }
             }
-// A bunch of comments are underneath this but I was tired of seeing them.
-//            if (!last_dpad_up && gamepad1.dpad_up) {
-//                int newVal = launchpower.ordinal() + 1;
-//                if (newVal >= MotorSpeeds.values().length)
-//                {
-//                    newVal = MotorSpeeds.values().length - 1;
-//                }
-//                launchpower = MotorSpeeds.values()[newVal];
-//            }
-//            if (!last_dpad_down && gamepad1.dpad_down) {
-//                int newVal = launchpower.ordinal() - 1;
-//                if (newVal < 0)
-//                {
-//                    newVal = 0;
-//                }
-//                launchpower = MotorSpeeds.values()[newVal];
-//            }
-//
-//            last_dpad_up = gamepad1.dpad_up;
-//            last_dpad_down = gamepad1.dpad_down;
-
-            //long shot
-//            if (gamepad1.dpad_down && !last_down) {
-//                this.launchpower = this.launchpower - 50;
-//               //launchpower = MotorSpeeds.NEAR;
-//            } //short shot
-//            if (gamepad1.dpad_up && !last_up) {
-//                this.launchpower = this.launchpower + 50;
-//                //launchpower = MotorSpeeds.FAR;
-//            }
-//            if (gamepad1.dpad_left) {
-//                launchpower = MotorSpeeds.FULL;
-//            }
 
             if (gamepad1.back) {
                 drive.driveToPosition(new Location(0,0,0), 0 ,telemetry);
