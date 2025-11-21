@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.CommandSystem.CommandScheduler;
 import org.firstinspires.ftc.teamcode.CommandSystem.ParallelCommandGroup;
 import org.firstinspires.ftc.teamcode.CommandSystem.SequentialCommandGroup;
 import org.firstinspires.ftc.teamcode.Commands.DriveToCommand;
+import org.firstinspires.ftc.teamcode.Commands.FarShootCommand;
 import org.firstinspires.ftc.teamcode.Commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.Commands.LimeLightTurnCommand;
 import org.firstinspires.ftc.teamcode.Commands.TimedShootCommand;
@@ -46,7 +47,7 @@ public class BaseFarAuto extends BaseNearAuto {
                 .add(new DriveToCommand(drive, doNotHitWall, telemetry))
                 .add(new DriveToCommand(drive, farShootPosition, telemetry))
                 .add(new LimeLightTurnCommand(drive,LimeLight, telemetry))
-                .add(new TimedShootCommand(shooter, intake, 4, 2, telemetry, MotorSpeeds.FAR))
+                .add(new FarShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.FAR))
                 .add(new DriveToCommand(drive, firstPickupPosition, telemetry))
                 .add(ParallelCommandGroup.getBuilder()
                         .add(new IntakeCommand(intake, 2, telemetry))
@@ -55,7 +56,7 @@ public class BaseFarAuto extends BaseNearAuto {
                 )
                 .add(new DriveToCommand(drive, farShootPosition, telemetry))
                 .add(new LimeLightTurnCommand(drive,LimeLight, telemetry))
-                .add(new TimedShootCommand(shooter, intake, 4, 2, telemetry, MotorSpeeds.FAR))
+                .add(new FarShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.FAR))
                 .add(new DriveToCommand(drive, secondPickupPosition, telemetry))
                 .add(ParallelCommandGroup.getBuilder()
                         .add(new IntakeCommand(intake, 2, telemetry))
@@ -64,7 +65,7 @@ public class BaseFarAuto extends BaseNearAuto {
                 )
                 .add(new DriveToCommand(drive, farShootPosition, telemetry))
                 .add(new LimeLightTurnCommand(drive,LimeLight, telemetry))
-                .add(new TimedShootCommand(shooter, intake, 4, 2, telemetry, MotorSpeeds.FAR))
+                .add(new FarShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.FAR))
                 .add(new DriveToCommand(drive, parkPosition, telemetry))
                 .build();
 
