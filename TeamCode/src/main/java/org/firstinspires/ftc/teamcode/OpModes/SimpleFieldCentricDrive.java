@@ -47,7 +47,7 @@ public class SimpleFieldCentricDrive extends LinearOpMode {
         Shooter launcher = new Shooter(hardwareMap);
         //MotorSpeeds launchpower = MotorSpeeds.NEAR;
         setTargets();
-        green = RevBlinkinLedDriver.BlinkinPattern.GREEN;
+        green = RevBlinkinLedDriver.BlinkinPattern.BEATS_PER_MINUTE_PARTY_PALETTE;
         red = RevBlinkinLedDriver.BlinkinPattern.RED;
         idle = RevBlinkinLedDriver.BlinkinPattern.BEATS_PER_MINUTE_FOREST_PALETTE;
 

@@ -25,11 +25,11 @@ public class BaseFarAuto extends LinearOpMode {
     Intake intake;
     LimeLight LimeLight;
     Location doNotHitWall = new Location(30, 0, 25);
-    Location farShootPosition = new Location(30, 0, 40);
+    Location farShootPosition = new Location(25, 0, 40);
     Location firstPickupPosition = new Location(80, 0, 95);
     Location firstPickupPosition2 = new Location(70,-130, 95);
-    Location secondPickupPosition = new Location(160, 0, 95);
-    Location secondPickupPosition2 = new Location(150,-130, 95);
+    Location secondPickupPosition = new Location(120, 0, 95);
+    Location secondPickupPosition2 = new Location(110,-130, 95);
     Location parkPosition = new Location(88, -10, 95);
     CommandScheduler scheduler = CommandScheduler.getInstance();
     Command auto;
@@ -62,7 +62,7 @@ public class BaseFarAuto extends LinearOpMode {
                 .add(new DriveToCommand(drive, farShootPosition, telemetry))
                 .add(new LimeLightTurnCommand(drive,LimeLight, telemetry))
                 .add(new FarShootCommand(shooter, intake, 4, telemetry, MotorSpeeds.FAR))
-                .add(new DriveToCommand(drive, secondPickupPosition, telemetry))
+                .add(new DriveToCommand(drive, secondPickupPosition, telemetry)) 
                 .add(ParallelCommandGroup.getBuilder()
                         .add(new IntakeCommand(intake, 2, telemetry))
                         .add(new DriveToCommand(drive, secondPickupPosition2, telemetry))

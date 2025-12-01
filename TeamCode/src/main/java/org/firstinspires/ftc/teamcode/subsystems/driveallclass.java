@@ -154,7 +154,6 @@ public class driveallclass extends Subsystem {
         }
 
         drive(forwardPower, strafePower, turnPower);
-
     }
 
     public boolean isAtPosition(Location target) {

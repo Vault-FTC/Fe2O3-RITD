@@ -27,7 +27,9 @@ public class BaseNearAuto extends LinearOpMode {
     Intake intake;
     LimeLight LimeLight;
     Location launchPosition = new Location(-110, 10, 0);
-    Location collectFirstRowArtifacts = new Location(-75, -100, 43);
+    Location firstLaunchPosition = new Location(-90, 10, 0);
+    Location prepareFirstRowArtifacts = new Location(-120, -20, 43);
+    Location collectFirstRowArtifacts = new Location(-90, -95, 43);
     Location prepareSecondRowArtifacts = new Location(-152,-80, 43);
     Location collectSecondRowArtifacts = new Location(-90, -144, 43);
     Location prepareCollectThirdRowArtifacts = new Location(-192,-124, 43);
@@ -52,9 +54,10 @@ public class BaseNearAuto extends LinearOpMode {
         setTargets();
 
         SequentialCommandGroup auto = SequentialCommandGroup.getBuilder()
-                .add(new DriveToCommand(drive, launchPosition, telemetry))
+                .add(new DriveToCommand(drive, firstLaunchPosition, telemetry))
 //                .add(new LimeLightTurnCommand(drive, LimeLight, telemetry))
                 .add(new TimedShootCommand(shooter, intake, 3, 1, telemetry, MotorSpeeds.AUTO_NEAR))
+                .add(new DriveToCommand(drive, prepareFirstRowArtifacts, telemetry))
                 .add(ParallelCommandGroup.getBuilder()
                         .add(new IntakeCommand(intake, 2, telemetry))
                         .add(new DriveToCommand(drive, collectFirstRowArtifacts, telemetry))
