@@ -10,7 +10,13 @@ public class DriveToCommand extends Command {
     private final driveallclass drive;
     private final Location target;
 
+    private double timeoutMs;
+
     public DriveToCommand(driveallclass drive, Location target, Telemetry telemetry) {
+        this(drive, target, telemetry, 7000);
+    }
+
+    public DriveToCommand(driveallclass drive, Location target, Telemetry telemetry, double timeoutMs) {
         this.drive = drive;
         this.target = target;
         this.telemetry = telemetry;
@@ -24,7 +30,10 @@ public class DriveToCommand extends Command {
     }
 
     public boolean isFinished() {
-        return drive.isAtPosition(target);
+        // if drive is at position. return finished
+        //else if timer is greater than or equal to target time, return finished
+        return drive.isAtPosition(target)
+                ||  timeSinceInitialized() > timeoutMs;
     }
 
     @Override

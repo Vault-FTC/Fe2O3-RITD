@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.CommandSystem.Command;
 import org.firstinspires.ftc.teamcode.CommandSystem.CommandScheduler;
 import org.firstinspires.ftc.teamcode.CommandSystem.ParallelCommandGroup;
 import org.firstinspires.ftc.teamcode.CommandSystem.SequentialCommandGroup;
+import org.firstinspires.ftc.teamcode.CommandSystem.WaitCommand;
 import org.firstinspires.ftc.teamcode.Commands.DriveToCommand;
 import org.firstinspires.ftc.teamcode.Commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.Commands.LightCommand;
@@ -20,6 +21,8 @@ import org.firstinspires.ftc.teamcode.subsystems.MotorSpeeds;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.driveallclass;
 
+import java.util.Timer;
+
 @Autonomous (name = "Blue Near", group = "Blue Team")
 public class BaseNearAuto extends LinearOpMode {
     driveallclass drive;
@@ -30,6 +33,7 @@ public class BaseNearAuto extends LinearOpMode {
     Location firstLaunchPosition = new Location(-90, 10, 0);
     Location prepareFirstRowArtifacts = new Location(-120, -20, 43);
     Location collectFirstRowArtifacts = new Location(-90, -95, 43);
+    //-9000 was -90
     Location prepareSecondRowArtifacts = new Location(-152,-80, 43);
     Location collectSecondRowArtifacts = new Location(-90, -144, 43);
     Location prepareCollectThirdRowArtifacts = new Location(-192,-124, 43);
@@ -58,6 +62,7 @@ public class BaseNearAuto extends LinearOpMode {
 //                .add(new LimeLightTurnCommand(drive, LimeLight, telemetry))
                 .add(new TimedShootCommand(shooter, intake, 3, 1, telemetry, MotorSpeeds.AUTO_NEAR))
                 .add(new DriveToCommand(drive, prepareFirstRowArtifacts, telemetry))
+                //.add(new WaitCommand(4500))
                 .add(ParallelCommandGroup.getBuilder()
                         .add(new IntakeCommand(intake, 2, telemetry))
                         .add(new DriveToCommand(drive, collectFirstRowArtifacts, telemetry))

@@ -37,6 +37,7 @@ public final class CommandScheduler implements Runnable {
                     command.state = Command.State.SCHEDULED;
                     command.initializedTimestamp = command.timer.milliseconds();
                     command.initialize();
+                    command.initializeInternal();
                     break;
                 case SCHEDULED:
                     if (command.isFinished()) {

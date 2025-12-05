@@ -46,6 +46,11 @@ public abstract class Command {
 
     }
 
+    public void initializeInternal()
+    {
+        timer.reset();
+    }
+
     public double initializedTimestamp() {
         return initializedTimestamp;
     }
