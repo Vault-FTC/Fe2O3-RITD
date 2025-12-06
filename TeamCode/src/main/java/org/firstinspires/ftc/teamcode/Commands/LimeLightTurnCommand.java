@@ -52,7 +52,7 @@ public class LimeLightTurnCommand extends Command
 
     @Override
     public boolean isFinished(){
-       return tenseistime.seconds() > 1.5;
+       return tenseistime.seconds() > 0.8;
 
     }
 }

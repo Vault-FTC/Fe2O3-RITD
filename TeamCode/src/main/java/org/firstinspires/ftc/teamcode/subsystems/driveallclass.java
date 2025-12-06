@@ -160,7 +160,7 @@ public class driveallclass extends Subsystem {
         double currentX = poseEstimator.getGlobalX();
         double currentY = poseEstimator.getGlobalY();
         double currentHeading = poseEstimator.getHeading();
-        double tolerance = 15;
+        double tolerance = 15; // used to be 15
         double turnTolerance = 17.5;
         return Math.abs(currentX - target.Strafe) < tolerance &&
                 Math.abs(currentY - target.Forward) < tolerance &&

@@ -58,8 +58,8 @@ public class BaseNearAuto extends LinearOpMode {
         setTargets();
 
         SequentialCommandGroup auto = SequentialCommandGroup.getBuilder()
-                .add(new DriveToCommand(drive, firstLaunchPosition, telemetry))
-//                .add(new LimeLightTurnCommand(drive, LimeLight, telemetry))
+                .add(new DriveToCommand(drive, launchPosition, telemetry))
+                .add(new LimeLightTurnCommand(drive, LimeLight, telemetry))
                 .add(new TimedShootCommand(shooter, intake, 3, 1, telemetry, MotorSpeeds.AUTO_NEAR))
                 .add(new DriveToCommand(drive, prepareFirstRowArtifacts, telemetry))
                 //.add(new WaitCommand(4500))
@@ -69,7 +69,7 @@ public class BaseNearAuto extends LinearOpMode {
                         .build()
                 )
                 .add(new DriveToCommand(drive, launchPosition, telemetry))
-//                .add(new LimeLightTurnCommand(drive,LimeLight,telemetry))
+                .add(new LimeLightTurnCommand(drive,LimeLight,telemetry))
                 .add(new TimedShootCommand(shooter, intake, 2, 1, telemetry, MotorSpeeds.AUTO_NEAR))
                 .add(new DriveToCommand(drive, prepareSecondRowArtifacts, telemetry))
                 .add(ParallelCommandGroup.getBuilder()
@@ -80,7 +80,7 @@ public class BaseNearAuto extends LinearOpMode {
                 )
                 .add(new DriveToCommand(drive, prepareSecondRowArtifacts, telemetry))
                 .add(new DriveToCommand(drive, launchPosition, telemetry))
-//                .add(new LimeLightTurnCommand(drive,LimeLight,telemetry))
+                 .add(new LimeLightTurnCommand(drive,LimeLight,telemetry))
                 .add(new TimedShootCommand(shooter, intake, 2, 1, telemetry, MotorSpeeds.AUTO_NEAR))
 
                 .add(new DriveToCommand(drive, prepareCollectThirdRowArtifacts, telemetry))
